@@ -1,0 +1,70 @@
+
+ 
+
+.counter-item{
+ 
+    width: 200px;  
+    height: 100px;
+    display: flex;
+     flex-direction: column;
+     justify-content: space-around;
+     align-items: center;
+}
+
+.plus, .minus, .check, .close{
+    width: 25px;  
+    cursor: pointer;
+}
+
+.quantity{
+    width: 50px;
+}
+
+.check, .close{
+    margin-left: 50px;
+}
+
+.close{
+    width: 30px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.text_quantity{
+    font-weight: bold;
+}
+
+.send{
+    display: none;
+}
+
+.reason{
+    width: 200px;
+    display: none;
+}
+
+.error{
+    display: none;
+    color: red;
+    margin: 0 auto;
+    text-align: center;
+    width: 70px;
+    font-weight: bold;
+}
+
+.successfull{
+    display: none;
+    color: green;
+    margin: 0 auto;
+    width: 70px;
+    font-weight: bold;
+}
+
+.active{
+    display: flex;
+}
+
