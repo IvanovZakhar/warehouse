@@ -2,103 +2,75 @@ import { useState, useEffect } from 'react';
 import AppInfo from '../app-info/app-info';
 import SearchPanel from '../search-panel/search-panel';
 import AppFilter from '../app-filter/app-filter';
-import WarehouseList from '../warehouse-list/warehouse-list';
-
+import WarehouseList from '../warehouse-list/warehouse-list'; 
+import Logs from '../logs/logs';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Orders from '../orders/orders';
 import './app.css';
+import Category from '../category/category';
+import useWarehouseService from '../../services/warehouse-services';
+import PrintTable from '../printTable/print-table';
 
 
 const App = () => {
+    const [show, setShow] = useState(false);
+    const [category, setCategory] = useState('')
+    const [sort, setSort] = useState('')
+    const {getAllLogs, getAllProducts} = useWarehouseService()
+    const [logs, setLogs] = useState([]) 
+    const [data, setData] = useState([])
+    const [originalData, setOriginalData] = useState([])
 
- //    const deleteItem = (id) =>{
-//         this.setState(({data}) => {
-//             return{
-//                 data: data.filter(item => item.id !== id)
-//             }
-//         })
-//     }
+    useEffect(()=> {
+      getAllLogs().then(setLogs)
+    }, [])
+  
 
-//     const addItem = (name, salary)  => {
-//         const newItem = {
-//             name, 
-//             salary,
-//             increase: false,
-//             like: false,
-//             id: this.maxId++
-//         }
-//         this.setState(({data}) => {
-//             const newArr = [...data, newItem];
-//             return {
-//                 data: newArr
-//             }
-//         });
-//     }
+    useEffect(()=>{
+        getAllProducts().then(data => {
+            setData(data)
+            setOriginalData(data)})
+    }, [])
+
+    useEffect(() => {
+          setData(originalData.filter(item => {
+            if (category === "Все"){
+                return item
+            }
+            return item.category === category
+          }))
+    }, [category])
+
+    useEffect(() => {
     
-//     const onToggleProp = (id, prop) => {
-//         this.setState(({data}) => ({
-//             data: data.map(item => {
-//                 if (item.id === id){
-//                     return{...item, [prop]: !item[prop]}
-//                 }
-//                 return item;
-//             })
-//         }))
-//     }
-
-//     const searchEmp = (items, term) =>{
-//         if(term.length === 0){
-//             return items;
-//         }
-
-//         return items.filter(item => {
-//             return item.name.indexOf(term) > -1
-//         })
-//     }
-
-//     const onUpdateSearch = (term) => {
-//         this.setState({term});
-//     }
-
-//     const filterPost = (items, filter) => {
-//         switch (filter) {
-//             case 'rise':
-//                 return items.filter(item => item.like);
-//             case 'moreThen1000':
-//                 return items.filter(item => item.salary > 1000);
-//             default: 
-//                 return items    
-//         }
-//     }
-
-//     const onFilterSelect = (filter) => {
-//         this.setState({filter});
-//     }
-
-//     const ValueChange = (id) => {
-//         console.log(id)
-//         console.log(this.state.valueSalary)
-//     }
-
-//     const onUpdateValueSalary = (valueSalary) => {
-//         this.setState({valueSalary})
-//         console.log(this.state.valueSalary)
-        
-//     }
-
-    
-        // const {data, term, filter} = this.state;
-        // const visibleData = this.filterPost(this.searchEmp(data, term), filter);
-
-        return(
-            <div className="app">
-                <AppInfo />
-    
-                <div className="search-panel">
-                    <SearchPanel  />
-                   
-                </div>
-                <WarehouseList  />
-                {/* <EmployersAddForm  /> */}
-            </div>
+        const sortedByQuantityAsc = data.slice().sort((a, b) => a.quantity - b.quantity); 
+        const sortedByQuantityDesc = data.slice().sort((a, b) => b.quantity - a.quantity);
+        if(sort === 'По возрастанию'){
+            setData(sortedByQuantityAsc)
+        }else if(sort === 'По убыванию'){
+            setData(sortedByQuantityDesc)
+        }
+    }, [sort])
+        return( 
+            <BrowserRouter basename="/">
+              <Routes>
+                <Route path="/" element ={
+                    <div className="app">
+                        <AppInfo setShow={setShow}/>
+                        <Logs show={show} setShow={setShow} logs={logs}/>
+                        <div className="search-panel">
+                            <SearchPanel  />
+                            
+                        </div>
+                        <Category category={category} setCategory={setCategory} setSort={setSort}/>
+                        <WarehouseList category={category} logs={logs} sort={sort} data={data}/>
+                            
+                    </div>
+                }/>  
+                 <Route path="/orders" element ={ <Orders/>}/>
+                 <Route path="/print-table" element ={ <PrintTable data={data} setCategory={setCategory} setSort={setSort} setShow={setShow}/>}/>
+              </Routes>
+            </BrowserRouter>
         )
     }
  

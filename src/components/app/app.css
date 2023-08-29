@@ -2,3 +2,13 @@
     margin: 0 auto;
     max-width: 1000px;
 }
+
+.category{
+    display: flex; 
+    list-style: none;
+    margin-top: 20px;
+}
+
+.category__item{
+    margin-left: 10px;
+}

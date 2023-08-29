@@ -68,3 +68,6 @@ input::-webkit-inner-spin-button {
     display: flex;
 }
 
+.red{
+    color: red;
+}

@@ -1,0 +1,72 @@
+
+.Orders{
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+ svg{
+    margin: 0 auto;
+ }
+
+ .new-order{
+    position: relative; 
+ }
+
+ .search__art{
+    position: absolute;
+    left: 40px;
+    list-style: none;
+    top: 40px;
+ }
+
+ .search__art-item{
+    height: 30px;
+    border-bottom: 2px solid black; 
+ }
+
+ .search__art-item:hover{
+    color: #0b4086;
+    cursor: pointer;
+ }
+
+ .search{
+    width: 125px;
+ }
+
+ .number{
+    width: 50px;
+ }
+
+ form{
+    width: 950px;
+    height: 100px;
+    display: block;
+ }
+
+ input{
+    height: 30px;
+ }
+
+ .addedProd{
+   display: block;
+   margin: 0 auto;
+ }
+
+ .addedOrder{
+   display: block;
+   margin: 0 auto;
+ }
+
+ .master{
+   font-size: 24px;
+   font-weight: bold;  
+ }
+
+ .item_orders{
+   font-weight: bold;
+ }
+
+ .item_time{
+   font-weight: bold;
+   font-size: 18px;
+ }

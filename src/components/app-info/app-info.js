@@ -1,16 +1,30 @@
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown'; 
 import './app-info.css'
-
-const AppInfo = (data) => {
+ 
+const AppInfo = ({setShow}) => {
 
     // const increase = data.data.filter(item => {return item.increase === true})
 
     
      return(
         <div className="app-info">
-        <h1>Склад АрсеналЪ</h1>
-        {/* <h2>Общее число сотрудников: {data.data.length}.</h2>
-        <h2>Премию получат: {increase.length}</h2> */}
-    </div>
+          <Navbar expand="lg" className="bg-body-tertiary">
+            <Container>
+                <Navbar.Brand href="/" style={{color: 'white', fontWeight: 'bold', fontSize: '29px'}}>Склад АрсеналЪ </Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                    <Nav.Link href="/orders" style={{color: 'white'}}>Наряды</Nav.Link>
+                    <Nav.Link  style={{color: 'white'}} onClick={() => setShow(true)}>История</Nav.Link>
+                    <Nav.Link href="/print-table" style={{color: 'white'}}  >Печать</Nav.Link>
+                </Nav>
+                </Navbar.Collapse>
+            </Container>
+            </Navbar>
+        </div>
      )
 
     

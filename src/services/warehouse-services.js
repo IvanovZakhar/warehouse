@@ -24,9 +24,39 @@ const useWarehouseService = () => {
         return res
     }
 
+    const newOrder = async (data) => {
+        const res = await request(
+            `${_url}/new-order-warehouse`, 
+            'POST', 
+            JSON.stringify(data) 
+            )
+
+        return res
+    }
+
+    const getAllLogs = async () => {
+        
+        const res = await request(`${_url}/logs/products-for-warehouse`, 
+                                    'GET')
+    
+        return res
+    }
+
+    
+    const getAllOrders = async () => {
+        
+        const res = await request(`${_url}/all-orders-warehouse`, 
+                                    'GET')
+    
+        return res
+    }
+
     return {
         getAllProducts,
-        updateProduct
+        updateProduct,
+        getAllLogs, 
+        newOrder,
+        getAllOrders
     }
 }
 
