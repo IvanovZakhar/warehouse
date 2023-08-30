@@ -20,7 +20,8 @@ const App = () => {
     const [logs, setLogs] = useState([]) 
     const [data, setData] = useState([])
     const [originalData, setOriginalData] = useState([])
-
+    const [search, setSearch] = useState('')
+ 
     useEffect(()=> {
       getAllLogs().then(setLogs)
     }, [])
@@ -51,6 +52,13 @@ const App = () => {
             setData(sortedByQuantityDesc)
         }
     }, [sort])
+
+    useEffect(() => {
+        setData(originalData.filter(product =>
+            product.article.toLowerCase().includes(search.toLowerCase())
+          ))
+    }, [search])
+    
         return( 
             <BrowserRouter basename="/">
               <Routes>
@@ -59,7 +67,7 @@ const App = () => {
                         <AppInfo setShow={setShow}/>
                         <Logs show={show} setShow={setShow} logs={logs}/>
                         <div className="search-panel">
-                            <SearchPanel  />
+                            <SearchPanel  setSearch={setSearch}/>
                             
                         </div>
                         <Category category={category} setCategory={setCategory} setSort={setSort}/>
