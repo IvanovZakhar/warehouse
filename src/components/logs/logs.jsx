@@ -44,16 +44,16 @@ function Logs({show, setShow, logs}) {
         <Offcanvas.Body >
                 <Table striped bordered hover>
                     <thead>
-                        <tr>
-                        <th>№</th>
-                        <th>Дата</th>
-                        <th>Артикул</th>
-                        <th>Название</th>
-                        <th>Причина</th>
-                        <th>Было на складе</th>
-                        <th>Разница</th>
-                        <th>Итого на складе</th>
-                    </tr>
+                      <tr>
+                          <th>№</th>
+                          <th>Дата</th>
+                          <th>Артикул</th>
+                          <th>Название</th>
+                          <th>Причина</th>
+                          <th>Было на складе</th>
+                          <th>Разница</th>
+                          <th>Итого на складе</th>
+                      </tr>
                     </thead>
                     <tbody>
                       

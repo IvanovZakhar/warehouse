@@ -16,22 +16,67 @@ const App = () => {
     const [show, setShow] = useState(false);
     const [category, setCategory] = useState('')
     const [sort, setSort] = useState('')
-    const {getAllLogs, getAllProducts} = useWarehouseService()
+    const {getAllLogs, getAllProducts,  getAllOrders} = useWarehouseService()
     const [logs, setLogs] = useState([]) 
     const [data, setData] = useState([])
     const [originalData, setOriginalData] = useState([])
     const [search, setSearch] = useState('')
- 
-    useEffect(()=> {
-      getAllLogs().then(setLogs)
-    }, [])
-  
+    const [allOrders, setAllOrders] = useState([]) 
+    const [articleSummaries, setArticleSummaries] = useState({});
+
 
     useEffect(()=>{
+        getAllOrders().then(setAllOrders)
         getAllProducts().then(data => {
             setData(data)
-            setOriginalData(data)})
+            setOriginalData(data)
+        })
+       
+        getAllLogs().then(setLogs)
     }, [])
+
+    useEffect(()=> {
+   
+        const newArticleSummaries = allOrders.reduce((accumulator, order) => {
+            if (order.status !== "Упакован") {
+              order.products.forEach(product => {
+                const article = product.article;
+                const quantity = product.quantity;
+      
+                if (accumulator.hasOwnProperty(article)) {
+                  accumulator[article] += quantity;
+                } else {
+                  accumulator[article] = quantity;
+                }
+              });
+            }
+            return accumulator;
+          }, {});
+
+          console.log(newArticleSummaries)
+        setArticleSummaries(newArticleSummaries);
+
+    
+       
+    }, [allOrders])
+
+    useEffect(()=> {
+        if (Object.keys(articleSummaries).length > 0 && data.length > 0) {
+            const updatedData = data.map(item => {
+              const article = item.article;
+        
+              if (articleSummaries.hasOwnProperty(article)) {
+                return { ...item, orderQuantity: articleSummaries[article] };
+              }
+        
+              return item;
+            });
+        
+            console.log(updatedData);
+            setData(updatedData);
+            setOriginalData(updatedData);
+          }
+    }, [articleSummaries])
 
     useEffect(() => {
           setData(originalData.filter(item => {
@@ -71,11 +116,11 @@ const App = () => {
                             
                         </div>
                         <Category category={category} setCategory={setCategory} setSort={setSort}/>
-                        <WarehouseList category={category} logs={logs} sort={sort} data={data}/>
+                        <WarehouseList category={category} logs={logs} sort={sort} data={data} allOrders={allOrders}/>
                             
                     </div>
                 }/>  
-                 <Route path="/orders" element ={ <Orders/>}/>
+                 <Route path="/orders" element ={ <Orders allOrders={allOrders}/>}/>
                  <Route path="/print-table" element ={ <PrintTable data={data} setCategory={setCategory} setSort={setSort} setShow={setShow}/>}/>
               </Routes>
             </BrowserRouter>

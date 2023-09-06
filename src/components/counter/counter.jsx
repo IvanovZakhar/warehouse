@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 const Counter = ({data}) => {
     const {updateProduct} = useWarehouseService() 
-    const {quantity, article, name_of_product} = data
+    const {quantity, article, name_of_product, orderQuantity} = data
     const [send, setSend] = useState(false)
     const [newData, setNewData] = useState({})
     const [successfull, setSuccessfull] = useState(false)
@@ -36,7 +36,11 @@ const Counter = ({data}) => {
         <div className="counter">
             <div className='counter-item'>
                 <div className='text_quantity'>Кол-во</div>
-                <input type='number' defaultValue={quantity} className={`quantity ${quantity <= 2  ? 'red' : ''}`} onChange={(e) => onChangeValue(article, e.target.value, name_of_product)}/> 
+                <div className='counter-number'>
+                    <input type='number' defaultValue={quantity} className={`quantity ${quantity <= 2  ? 'red' : ''}`} onChange={(e) => onChangeValue(article, e.target.value, name_of_product)}/> 
+                     
+                    <span className='counter-order'>{orderQuantity ? `+ ${orderQuantity}` : null}</span>
+                </div>
             </div>
             <input type='text' placeholder='Коментарий' className={`reason ${send ? 'active' : ''}`} onChange={(e) => {setNewData({...newData, comment: e.target.value})}}/>
             <div className={`send ${send ? 'active' : ''}`}>

@@ -1,17 +1,14 @@
  
 import WarehouseListItem  from "../warehouse-list-item/warehouse-list-item" 
-import { useEffect, useState } from 'react';
-import useWarehouseService from '../../services/warehouse-services'; 
+import { useEffect  } from 'react'; 
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+ 
 import './warehouse-list.css'
 
-const WarehouseList = ({category, logs, sort,data ,}) => {
-  
-
-   
+const WarehouseList = ({logs, data, allOrders}) => {
+        
+        console.log(data)
  
         const elements = data.map((item, i) => {
        

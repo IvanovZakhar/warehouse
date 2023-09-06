@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form"
 import React from 'react';
 
 
-const Orders = () => {
+const Orders = ({allOrders}) => {
     const [orders, setOrders] = useState([])
     const {getAllProducts, newOrder, getAllOrders} = useWarehouseService()
     const [products, setProducts] = useState([]) 
@@ -21,7 +21,7 @@ const Orders = () => {
     const { register, handleSubmit, setValue, watch,reset} = useForm( )
     const [salaryValue, setSalaryValue] = useState('');
     const [quantityValue, setQuantityValue] = useState(''); 
-    const [allOrders, setAllOrders] = useState([])
+
     const [master, setMaster] = useState('')
     const textInputValue = watch('textInput'); 
 
@@ -54,13 +54,13 @@ const Orders = () => {
         setValue('textInput', value); // Устанавливаем значение текстового поля
     };
 
-     
+    useEffect(()=>{
+        getAllProducts().then(setProducts) 
+    }, [])
+
  
     
-    useEffect(()=>{
-        getAllProducts().then(setProducts)
-        getAllOrders().then(setAllOrders)
-    }, [])
+ 
 
 
 
@@ -142,7 +142,7 @@ const Orders = () => {
 
             <Accordion defaultActiveKey="1" style={{marginTop: '50px'}}>
             {allOrders.map(order => {   
-                const {barcodeOrders, createdAt, master, products} = order
+                const {barcodeOrders, createdAt, master, products, status} = order
                 const newDate = `${createdAt.slice(8,10)}.${createdAt.slice(5,7)}.${createdAt.slice(0,4)}`
                 const newTime = `${+createdAt.slice(11,13) + 3}:${createdAt.slice(14,16)}` 
                 return(
@@ -164,10 +164,18 @@ const Orders = () => {
                                         <br/>
                                         <Badge bg="secondary">{newTime}</Badge>
                                     </th>
-                                    <th colSpan={4}   > 
-                                    {<Barcode barcodeOrders={barcodeOrders}/>}</th> 
-                                    <th colSpan={2} className='master'>Мастер
-                                    <br/>         <Badge bg="secondary">{master}</Badge></th> 
+                                    <th colSpan={3}> 
+                                    {<Barcode barcodeOrders={barcodeOrders}/>}</th>
+                                    <th colSpan={2} style={{fontSize: '24px'}}>
+                                        Статус
+                                        <br/>
+                                        <Badge bg={ status === "Упакован" ?  "success" :  status === "Изготовление" ? "primary" : "warning"  } 
+                                            style={{fontSize: '16px'}}>
+                                            {status}
+                                        </Badge></th>
+                                
+                                    <th colSpan={1} className='master'>Мастер
+                                    <br/> <Badge bg="secondary">{master}</Badge></th> 
                                 </tr>
                             </thead>
                                 <thead>
