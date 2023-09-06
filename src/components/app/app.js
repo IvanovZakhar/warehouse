@@ -26,12 +26,13 @@ const App = () => {
 
 
     useEffect(()=>{
-        getAllOrders().then(setAllOrders)
+       
         getAllProducts().then(data => {
             setData(data)
             setOriginalData(data)
+            getAllOrders().then(setAllOrders)
         })
-       
+      
         getAllLogs().then(setLogs)
     }, [])
 
@@ -55,9 +56,7 @@ const App = () => {
 
           console.log(newArticleSummaries)
         setArticleSummaries(newArticleSummaries);
-
-    
-       
+ 
     }, [allOrders])
 
     useEffect(()=> {
