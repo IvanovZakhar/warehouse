@@ -17,9 +17,10 @@ const AppInfo = ({setShow}) => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link href="/orders" style={{color: 'white'}}>Наряды</Nav.Link>
-                    <Nav.Link  style={{color: 'white'}} onClick={() => setShow(true)}>История</Nav.Link>
+                    <Nav.Link href="/orders" style={{color: 'white',  }}  >Наряды</Nav.Link> 
                     <Nav.Link href="/print-table" style={{color: 'white'}}  >Печать</Nav.Link>
+                    <Nav.Link  onClick={() => window.open('https://orders-products-z4dj.vercel.app/list-order?', '_blank')}  style={{color: 'white'}}  >Проверить сборщика</Nav.Link>
+
                 </Nav>
                 </Navbar.Collapse>
             </Container>

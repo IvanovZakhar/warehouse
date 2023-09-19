@@ -3,14 +3,17 @@ import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
-const Category = ({setCategory, setSort}) => {
+const Category = ({setCategory, setSort, setShow}) => {
     return (
         <ul className="category">
+
             <li className='category__item'  > 
+            
                 <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Все
                 </Button>
             </li>
+
             <li className='category__item'>  
                 <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Решетки  
@@ -42,14 +45,20 @@ const Category = ({setCategory, setSort}) => {
                 </Button>
             </li>
             <li className='category__item'  > 
+                <Button variant="success"   onClick={(e) => setCategory(e.target.innerHTML) }>
+                   В работе 
+                </Button>
+            </li>
+  
+            <li className='category__item'  > 
             <Dropdown  >
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                <Dropdown.Toggle variant="primary" id="dropdown-basic">
                     Сортировка
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu >
                     <Dropdown.Item  onClick={(e) => setSort(e.target.innerHTML)}>По возрастанию</Dropdown.Item>
-                    <Dropdown.Item  onClick={(e) => setSort(e.target.innerHTML)}>По убыванию</Dropdown.Item> 
+                    <Dropdown.Item  onClick={(e) => setSort(e.target.innerHTML)}>По убыванию</Dropdown.Item>  
                 </Dropdown.Menu>
             </Dropdown>
             </li>

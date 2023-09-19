@@ -2,6 +2,8 @@
     padding: 15px 20px;
     border-bottom: 1px solid #3d5a80;
     display: flex;
+    margin-top: 10px;
+    box-shadow: 0 7px 29px hsla(240,5%,41%,.1);
 }
 
 .list-group-item:last-child {

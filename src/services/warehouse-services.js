@@ -43,11 +43,9 @@ const useWarehouseService = () => {
     }
 
     
-    const getAllOrders = async () => {
-        
+    const getAllOrders = async () => { 
         const res = await request(`${_url}/all-orders-warehouse`, 
-                                    'GET')
-    
+                                    'GET') 
         return res
     }
 

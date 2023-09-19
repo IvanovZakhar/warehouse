@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import AppInfo from '../app-info/app-info';
-import SearchPanel from '../search-panel/search-panel';
-import AppFilter from '../app-filter/app-filter';
+import SearchPanel from '../search-panel/search-panel'; 
 import WarehouseList from '../warehouse-list/warehouse-list'; 
 import Logs from '../logs/logs';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -10,7 +9,7 @@ import './app.css';
 import Category from '../category/category';
 import useWarehouseService from '../../services/warehouse-services';
 import PrintTable from '../printTable/print-table';
-
+import Button from 'react-bootstrap/Button'; 
 
 const App = () => {
     const [show, setShow] = useState(false);
@@ -53,8 +52,7 @@ const App = () => {
             }
             return accumulator;
           }, {});
-
-          console.log(newArticleSummaries)
+ 
         setArticleSummaries(newArticleSummaries);
  
     }, [allOrders])
@@ -70,8 +68,7 @@ const App = () => {
         
               return item;
             });
-        
-            console.log(updatedData);
+         
             setData(updatedData);
             setOriginalData(updatedData);
           }
@@ -81,20 +78,21 @@ const App = () => {
           setData(originalData.filter(item => {
             if (category === "Все"){
                 return item
+            }else if (category === "В работе"){
+                return item.orderQuantity
             }
             return item.category === category
           }))
     }, [category])
 
-    useEffect(() => {
-    
+    useEffect(() => { 
         const sortedByQuantityAsc = data.slice().sort((a, b) => a.quantity - b.quantity); 
-        const sortedByQuantityDesc = data.slice().sort((a, b) => b.quantity - a.quantity);
+        const sortedByQuantityDesc = data.slice().sort((a, b) => b.quantity - a.quantity);  
         if(sort === 'По возрастанию'){
             setData(sortedByQuantityAsc)
         }else if(sort === 'По убыванию'){
             setData(sortedByQuantityDesc)
-        }
+        } 
     }, [sort])
 
     useEffect(() => {
@@ -108,13 +106,21 @@ const App = () => {
               <Routes>
                 <Route path="/" element ={
                     <div className="app">
-                        <AppInfo setShow={setShow}/>
+                 
+                        <AppInfo />
+                
                         <Logs show={show} setShow={setShow} logs={logs}/>
-                        <div className="search-panel">
+                        <div className="search-panel" >
                             <SearchPanel  setSearch={setSearch}/>
                             
                         </div>
-                        <Category category={category} setCategory={setCategory} setSort={setSort}/>
+             
+                        <Category category={category} setCategory={setCategory} setSort={setSort} setShow={setShow}/>
+                        <div className="d-grid gap-2">
+                                  <Button size="lg"  variant="outline-primary" onClick={() => setShow(!show)} style={{height: '35px', padding: '1px',  color: 'black'}}>
+                                    Общая история v
+                                  </Button> 
+                               </div>
                         <WarehouseList category={category} logs={logs} sort={sort} data={data} allOrders={allOrders}/>
                             
                     </div>

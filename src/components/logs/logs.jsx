@@ -1,14 +1,25 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import useWarehouseService from '../../services/warehouse-services';
+import Offcanvas from 'react-bootstrap/Offcanvas'; 
 import Table from 'react-bootstrap/Table';
 
 function Logs({show, setShow, logs}) { 
   const handleClose = () => setShow(false);
- 
+  const [newLogs, setNewLogs] = useState([])
 
-  const tableLogs = logs.map((log, i) => {
+  useEffect(() => {
+    setNewLogs(logs)
+  }, [logs])
+ 
+  const sortLogsDate = (e) => { 
+   setNewLogs(logs.filter(log => log.date.slice(0,10) === e.target.value))
+  }
+
+  const resetNewLogs = () => {
+    setNewLogs(logs)
+  }
+
+  const tableLogs = newLogs.map((log, i) => {
     const {date, article, name_of_product, newQuantity, oldQuantity, quantityDifference, comment} = log
     const newDate = `${date.slice(8,10)}.${date.slice(5,7)}.${date.slice(0,4)}`
     const newTime = `${+date.slice(11,13) + 3}:${date.slice(14,16)}` 
@@ -42,6 +53,8 @@ function Logs({show, setShow, logs}) {
           <Offcanvas.Title>История изменений</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body >
+                <input type="date" onChange={sortLogsDate}/>
+                <Button variant="primary" onClick={resetNewLogs} style={{marginLeft: '10px', marginBottom: '10px', height: '35px'}}>Показать все</Button>
                 <Table striped bordered hover>
                     <thead>
                       <tr>

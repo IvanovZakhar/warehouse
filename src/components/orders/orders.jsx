@@ -1,7 +1,8 @@
 import Table from 'react-bootstrap/Table';
 import AppInfo from "../app-info/app-info"
 import Accordion from 'react-bootstrap/Accordion';
-import Badge from 'react-bootstrap/Badge'; 
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button'; 
 import { useBarcode } from 'next-barcode';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -10,7 +11,8 @@ import { useState, useEffect } from 'react';
 import useWarehouseService from '../../services/warehouse-services';
 import { useForm } from "react-hook-form"
 import React from 'react';
-
+import saveAs from 'file-saver';
+import XLSX from 'xlsx';
 
 const Orders = ({allOrders}) => {
     const [orders, setOrders] = useState([])
@@ -20,11 +22,22 @@ const Orders = ({allOrders}) => {
     const [searchRes, setSearchRes] = useState([]) 
     const { register, handleSubmit, setValue, watch,reset} = useForm( )
     const [salaryValue, setSalaryValue] = useState('');
-    const [quantityValue, setQuantityValue] = useState(''); 
-
+    const [quantityValue, setQuantityValue] = useState('');  
     const [master, setMaster] = useState('')
     const textInputValue = watch('textInput'); 
+    const [newOrders, setNewOrders] = useState([])
 
+    useEffect(() => {
+        setNewOrders(allOrders)
+    }, [allOrders])
+
+    const sortOrders = (e) => { 
+        setNewOrders(allOrders.filter(order => order.createdAt.slice(0,10) === e.target.value))
+    }
+
+    const resetNewOrders = () => {
+        setNewOrders(allOrders)
+    }
      
     const totalSalary = salaryValue * quantityValue;
   
@@ -36,7 +49,9 @@ const Orders = ({allOrders}) => {
       setQuantityValue(e.target.value);  
     };
 
-
+    const sortOrdersCategory = (e) =>{ 
+        setNewOrders(allOrders.filter(order => order.status === e.target.outerText))
+    }
     
      
     const onSubmit = (data) => { 
@@ -99,8 +114,7 @@ const Orders = ({allOrders}) => {
         </>
       ))
 
-  
-  
+ 
 
       const saveAsPDF = async (id) => {
         const input = document.getElementById(`${id}`);
@@ -139,15 +153,36 @@ const Orders = ({allOrders}) => {
     return(
         <div className="Orders">
             <AppInfo/>
-
-            <Accordion defaultActiveKey="1" style={{marginTop: '50px'}}>
-            {allOrders.map(order => {   
+            <div className='orders__category-sort'>
+                <input type='date' style={{marginTop: '10px'}} onChange={sortOrders}/> 
+                <Button variant="primary" 
+                        style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
+                        onClick={sortOrdersCategory}>Изготовление</Button>{' '} 
+                <Button variant="warning" 
+                        style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}
+                        onClick={sortOrdersCategory}>Покраска</Button>{' '}
+                <Button variant="success" 
+                        style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
+                        onClick={sortOrdersCategory}>Упакован</Button>{' '}
+                <Button variant="secondary" onClick={resetNewOrders} style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}>Показать все</Button>
+            </div>
+                
+            <Accordion defaultActiveKey="1" style={{marginTop: '10px'}}>
+            {newOrders.map(order => {   
                 const {barcodeOrders, createdAt, master, products, status} = order
                 const newDate = `${createdAt.slice(8,10)}.${createdAt.slice(5,7)}.${createdAt.slice(0,4)}`
                 const newTime = `${+createdAt.slice(11,13) + 3}:${createdAt.slice(14,16)}` 
                 return(
                     <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
-                        <Accordion.Header >Наряд № {`${barcodeOrders}`}</Accordion.Header>
+                        <Accordion.Header >
+                                 {  `  ${newDate} Наряд №${barcodeOrders} `  }
+                                <Badge bg={ status === "Упакован" ?  "success" :  status === "Изготовление" ? "primary" : "warning"  } 
+                                            style={{fontSize: '16px', marginLeft: '10px',  height: '25px', padding: '5px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>
+                                            {status}
+                                </Badge>
+                                
+                          
+                        </Accordion.Header>
                         <Accordion.Body>
 
                             <Table striped bordered hover id={`${barcodeOrders}`}> 
@@ -165,7 +200,7 @@ const Orders = ({allOrders}) => {
                                         <Badge bg="secondary">{newTime}</Badge>
                                     </th>
                                     <th colSpan={3}> 
-                                    {<Barcode barcodeOrders={barcodeOrders}/>}</th>
+                                     {<Barcode barcodeOrders={barcodeOrders}/>}</th>
                                     <th colSpan={2} style={{fontSize: '24px'}}>
                                         Статус
                                         <br/>
