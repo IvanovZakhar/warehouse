@@ -5,10 +5,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 const Category = ({setCategory, setSort, setShow}) => {
     return (
-        <ul className="category">
+        <ul className="category" style={{display: 'flex', flexWrap: 'wrap'}}>
 
-            <li className='category__item'  > 
-            
+            <li className='category__item'  >  
                 <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Все
                 </Button>
@@ -45,12 +44,22 @@ const Category = ({setCategory, setSort, setShow}) => {
                 </Button>
             </li>
             <li className='category__item'  > 
+                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                    Дровницы
+                </Button>
+            </li>
+            <li className='category__item'  > 
+                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                    Козырьки  
+                </Button>
+            </li>
+            <li className='category__item'  style={{marginTop: '10px'}}> 
                 <Button variant="success"   onClick={(e) => setCategory(e.target.innerHTML) }>
                    В работе 
                 </Button>
             </li>
   
-            <li className='category__item'  > 
+            <li className='category__item'  style={{marginTop: '10px'}}> 
             <Dropdown  >
                 <Dropdown.Toggle variant="primary" id="dropdown-basic">
                     Сортировка
