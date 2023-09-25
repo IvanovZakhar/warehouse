@@ -109,7 +109,10 @@ const Orders = ({allOrders}) => {
                 <option value="">Выберите</option>
                 <option value="Тургунов">Тургунов</option>
                 <option value="Бородин">Бородин</option>
-                <option value="Зеленов">Зеленов</option> 
+                <option value="Зеленов">Зеленов</option>
+                <option value="Храмов">Храмов</option>
+                <option value="Иванов">Иванов</option> 
+                <option value="Орехов">Орехов</option>   
             </select>
         </>
       ))
