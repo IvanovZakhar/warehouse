@@ -53,6 +53,11 @@ const Category = ({setCategory, setSort, setShow}) => {
                     Козырьки  
                 </Button>
             </li>
+            <li className='category__item'  > 
+                <Button variant="secondary" style={{marginTop: '10px', backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                    Противоугонные
+                </Button>
+            </li>
             <li className='category__item'  style={{marginTop: '10px'}}> 
                 <Button variant="success"   onClick={(e) => setCategory(e.target.innerHTML) }>
                    В работе 
