@@ -161,12 +161,10 @@ const Orders = ({allOrders}) => {
                 <Button variant="primary" 
                         style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
                         onClick={sortOrdersCategory}>Изготовление</Button>{' '} 
-                <Button variant="warning" 
-                        style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}
-                        onClick={sortOrdersCategory}>Покраска</Button>{' '}
+        
                 <Button variant="success" 
                         style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
-                        onClick={sortOrdersCategory}>Упакован</Button>{' '}
+                        onClick={sortOrdersCategory}>Готов</Button>{' '}
                 <Button variant="secondary" onClick={resetNewOrders} style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}>Показать все</Button>
             </div>
                 
@@ -179,7 +177,7 @@ const Orders = ({allOrders}) => {
                     <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
                         <Accordion.Header >
                                  {  `  ${newDate} Наряд №${barcodeOrders} `  }
-                                <Badge bg={ status === "Упакован" ?  "success" :  status === "Изготовление" ? "primary" : "warning"  } 
+                                <Badge bg={ status === "Готов" ?  "success" : "primary"   } 
                                             style={{fontSize: '16px', marginLeft: '10px',  height: '25px', padding: '5px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>
                                             {status}
                                 </Badge>
@@ -207,7 +205,7 @@ const Orders = ({allOrders}) => {
                                     <th colSpan={2} style={{fontSize: '24px'}}>
                                         Статус
                                         <br/>
-                                        <Badge bg={ status === "Упакован" ?  "success" :  status === "Изготовление" ? "primary" : "warning"  } 
+                                        <Badge bg={ status === "Упакован" ?  "success" :  "primary"   } 
                                             style={{fontSize: '16px'}}>
                                             {status}
                                         </Badge></th>
