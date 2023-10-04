@@ -275,7 +275,7 @@ const Orders = ({allOrders}) => {
     
             <AppInfo/>
             <Toast style={{display: `${error ? 'block' : 'none'}`,position: 'sticky', top: `20px`, right: '10px', zIndex: '10', backgroundColor: 'yellow'}}>
-                <Toast.Header>
+                <Toast.Header onClick={() => {setError(false)}}>
                     <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
                     <strong className="me-auto">Внимание</strong> 
                 </Toast.Header>
