@@ -2,6 +2,7 @@
 .Orders{
     margin: 0 auto;
     max-width: 1000px;
+    position: relative;
 }
 
  svg{
@@ -73,4 +74,24 @@
 
  .orders__category-sort{
    display: flex;
+ }
+
+ .pagination{ 
+   margin-top: 20px; 
+   li:first-child, li:last-child{
+      width: 30px;
+      background-color: white; 
+   }
+   li{
+      width: 20px;
+      border: 1px solid black;
+      display: flex;
+      justify-content: center;
+      margin-left: 10px;
+      color: white;
+      background-color: rgb(13,110,253); 
+   }
+   .active{
+      background-color: #495057;
+   }
  }

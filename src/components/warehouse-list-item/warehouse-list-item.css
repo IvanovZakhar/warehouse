@@ -20,8 +20,7 @@
 .list-group-item input {
     line-height: 35px;
     font-size: 20px;
-    text-align: center;
-    border: 0;
+    text-align: center; 
 }
 
 .list-group-item button {

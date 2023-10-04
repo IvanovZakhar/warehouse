@@ -6,13 +6,14 @@ import Button from 'react-bootstrap/Button';
 import { useBarcode } from 'next-barcode';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './orders.css'
+import './orders.scss'
 import { useState, useEffect } from 'react';
 import useWarehouseService from '../../services/warehouse-services';
 import { useForm } from "react-hook-form"
 import React from 'react';
-import saveAs from 'file-saver';
-import XLSX from 'xlsx';
+import CloseButton from 'react-bootstrap/CloseButton'; 
+import ReactPaginate from 'react-paginate'; 
+import Toast from 'react-bootstrap/Toast';
 
 const Orders = ({allOrders}) => {
     const [orders, setOrders] = useState([])
@@ -26,10 +27,15 @@ const Orders = ({allOrders}) => {
     const [master, setMaster] = useState('')
     const textInputValue = watch('textInput'); 
     const [newOrders, setNewOrders] = useState([])
+    const [error, setError] = useState(false)
+
+
 
     useEffect(() => {
-        setNewOrders(allOrders)
+        setNewOrders(allOrders.reverse())
     }, [allOrders])
+
+  
 
     const sortOrders = (e) => { 
         setNewOrders(allOrders.filter(order => order.createdAt.slice(0,10) === e.target.value))
@@ -74,11 +80,11 @@ const Orders = ({allOrders}) => {
     }, [])
 
  
-    
+    const deleteItem = (i) => {
+        setOrders(prevOrders => prevOrders.filter(item => item.id !== i))
+    }
  
-
-
-
+ 
     const searchArt = (search) =>{
         if(search){
             
@@ -103,6 +109,33 @@ const Orders = ({allOrders}) => {
              </ul>
         )
     }
+    const Pagination = ({ data, itemsPerPage }) => {
+        const [currentPage, setCurrentPage] = useState(0);
+      
+        const handlePageChange = ({ selected }) => {
+          setCurrentPage(selected);
+        };
+      
+        const offset = currentPage * itemsPerPage;
+        const currentItems = data.slice(offset, offset + itemsPerPage);
+      
+        return (
+          <div>
+            {currentItems.map((item, index) => (
+              <div key={index}>{item}</div>
+            ))}
+      
+            <ReactPaginate 
+                   previousLabel={'←'}
+                   nextLabel={'→'}
+              pageCount={Math.ceil(data.length / itemsPerPage)}
+              onPageChange={handlePageChange}
+              containerClassName={'pagination'}
+              activeClassName={'active'}
+            />
+          </div>
+        );
+      };
     const Select = React.forwardRef(({ onChange, onBlur, name  }, ref) => (
         <> 
             <select id="pet-select"  name={name} ref={ref} onChange={onChange} onBlur={onBlur}>
@@ -152,10 +185,102 @@ const Orders = ({allOrders}) => {
             margin: '0 auto',
             textAlign: 'center'
           }}/>;
-      };
+      }; 
+      const itemsPerPage = 10;
+      const elem =newOrders.map(order => {   
+        const {barcodeOrders, createdAt, master, products, status} = order
+        const newDate = `${createdAt.slice(8,10)}.${createdAt.slice(5,7)}.${createdAt.slice(0,4)}`
+        const newTime = `${+createdAt.slice(11,13) + 3}:${createdAt.slice(14,16)}` 
+        return(
+            <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
+                <Accordion.Header >
+                         {  `  ${newDate} Наряд №${barcodeOrders} `  }
+                        <Badge bg={ status === "Готов" ?  "success" : "primary"   } 
+                                    style={{fontSize: '16px', marginLeft: '10px',  height: '25px', padding: '5px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>
+                                    {status}
+                        </Badge>
+                        
+                  
+                </Accordion.Header>
+                <Accordion.Body>
+
+                    <Table striped bordered hover id={`${barcodeOrders}`}> 
+                    <thead>
+                        <tr>
+                            <th className='item_time'>
+                                Дата 
+                                <br/>
+                                <Badge bg="secondary">{newDate}</Badge> 
+                                <br/> 
+                            </th>
+                            <th className='item_time'>
+                                Время
+                                <br/>
+                                <Badge bg="secondary">{newTime}</Badge>
+                            </th>
+                            <th colSpan={3}> 
+                             {<Barcode barcodeOrders={barcodeOrders}/>}</th>
+                            <th colSpan={2} style={{fontSize: '24px'}}>
+                                Статус
+                                <br/>
+                                <Badge bg={ status === "Упакован" ?  "success" :  "primary"   } 
+                                    style={{fontSize: '16px'}}>
+                                    {status}
+                                </Badge></th>
+                        
+                            <th colSpan={1} className='master'>Мастер
+                            <br/> <Badge bg="secondary">{master}</Badge></th> 
+                        </tr>
+                    </thead>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Артикул</th>
+                                <th>Название</th>
+                                <th>3пл/шт.</th>
+                                <th>Кол-во</th>
+                                <th>Общая 3пл/шт.</th>
+                                <th>Кол-во компл.</th>
+                                <th>Сварщик</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {products.map((product, i) => {
+                                const {article, name_of_product, salary, quantity, quantityCompl, worker} = product
+                                return(
+                                    <tr key={i}>
+                                        <td>{i+1}</td>
+                                        <td className='item_orders'>{article}</td>
+                                        <td className='item_orders'>{name_of_product}</td>
+                                        <td className='item_orders'>{salary}</td>
+                                        <td className='item_orders'>{quantity}</td>
+                                        <td className='item_orders'>{quantity * salary}</td>
+                                        <td className='item_orders'>{quantityCompl}</td> 
+                                        <td className='item_orders'>{worker}</td>
+                                        
+                                    </tr>
+                                )
+                            })}
+                             
+                        </tbody>
+                    </Table>
+                    <button onClick={() => saveAsPDF(`${barcodeOrders}`)}>Сохранить</button>
+                </Accordion.Body>
+            </Accordion.Item>
+        )
+    })
+    console.log(document.documentElement.clientHeight)
     return(
-        <div className="Orders">
+        <div className="Orders" >
+    
             <AppInfo/>
+            <Toast style={{display: `${error ? 'block' : 'none'}`,position: 'sticky', top: `20px`, right: '10px', zIndex: '10', backgroundColor: 'yellow'}}>
+                <Toast.Header>
+                    <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+                    <strong className="me-auto">Внимание</strong> 
+                </Toast.Header>
+                <Toast.Body>Наряд пуст!</Toast.Body>
+            </Toast>
             <div className='orders__category-sort'>
                 <input type='date' style={{marginTop: '10px'}} onChange={sortOrders}/> 
                 <Button variant="primary" 
@@ -168,88 +293,8 @@ const Orders = ({allOrders}) => {
                 <Button variant="secondary" onClick={resetNewOrders} style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}>Показать все</Button>
             </div>
                 
-            <Accordion defaultActiveKey="1" style={{marginTop: '10px'}}>
-            {newOrders.map(order => {   
-                const {barcodeOrders, createdAt, master, products, status} = order
-                const newDate = `${createdAt.slice(8,10)}.${createdAt.slice(5,7)}.${createdAt.slice(0,4)}`
-                const newTime = `${+createdAt.slice(11,13) + 3}:${createdAt.slice(14,16)}` 
-                return(
-                    <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
-                        <Accordion.Header >
-                                 {  `  ${newDate} Наряд №${barcodeOrders} `  }
-                                <Badge bg={ status === "Готов" ?  "success" : "primary"   } 
-                                            style={{fontSize: '16px', marginLeft: '10px',  height: '25px', padding: '5px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>
-                                            {status}
-                                </Badge>
-                                
-                          
-                        </Accordion.Header>
-                        <Accordion.Body>
-
-                            <Table striped bordered hover id={`${barcodeOrders}`}> 
-                            <thead>
-                                <tr>
-                                    <th className='item_time'>
-                                        Дата 
-                                        <br/>
-                                        <Badge bg="secondary">{newDate}</Badge> 
-                                        <br/> 
-                                    </th>
-                                    <th className='item_time'>
-                                        Время
-                                        <br/>
-                                        <Badge bg="secondary">{newTime}</Badge>
-                                    </th>
-                                    <th colSpan={3}> 
-                                     {<Barcode barcodeOrders={barcodeOrders}/>}</th>
-                                    <th colSpan={2} style={{fontSize: '24px'}}>
-                                        Статус
-                                        <br/>
-                                        <Badge bg={ status === "Упакован" ?  "success" :  "primary"   } 
-                                            style={{fontSize: '16px'}}>
-                                            {status}
-                                        </Badge></th>
-                                
-                                    <th colSpan={1} className='master'>Мастер
-                                    <br/> <Badge bg="secondary">{master}</Badge></th> 
-                                </tr>
-                            </thead>
-                                <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Артикул</th>
-                                        <th>Название</th>
-                                        <th>3пл/шт.</th>
-                                        <th>Кол-во</th>
-                                        <th>Общая 3пл/шт.</th>
-                                        <th>Кол-во компл.</th>
-                                        <th>Сварщик</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {products.map((product, i) => {
-                                        const {article, name_of_product, salary, quantity, quantityCompl, worker} = product
-                                        return(
-                                            <tr key={i}>
-                                                <td>{i+1}</td>
-                                                <td className='item_orders'>{article}</td>
-                                                <td className='item_orders'>{name_of_product}</td>
-                                                <td className='item_orders'>{salary}</td>
-                                                <td className='item_orders'>{quantity}</td>
-                                                <td className='item_orders'>{quantity * salary}</td>
-                                                <td className='item_orders'>{quantityCompl}</td> 
-                                                <td className='item_orders'>{worker}</td>
-                                            </tr>
-                                        )
-                                    })}
-                                     
-                                </tbody>
-                            </Table>
-                            <button onClick={() => saveAsPDF(`${barcodeOrders}`)}>Сохранить</button>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                )
-            })}
+            <Accordion defaultActiveKey="1" style={{marginTop: '10px'}}> 
+            <Pagination data={elem} itemsPerPage={itemsPerPage} />
             <Accordion.Item eventKey="1">
                 <Accordion.Header>Создать новый </Accordion.Header>
                 <Accordion.Body>
@@ -287,10 +332,10 @@ const Orders = ({allOrders}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order, i) => {
+                            {orders.map((order) => {
                                 return(
-                                    <tr key={i}>
-                                        <td>{i + 1 }</td>
+                                    <tr key={order.id}>
+                                        <td>{order.id }</td>
                                         <td>{order.article}</td>  
                                         <td>{order.name_of_product}</td>
                                         <td>{order.salary}</td>
@@ -298,6 +343,7 @@ const Orders = ({allOrders}) => {
                                         <td>{order.totalSalary}</td>
                                         <td>{order.quantityCompl}</td>
                                         <td>{order.worker}</td>
+                                        <CloseButton onClick={() => deleteItem(order.id)}/>
                                     </tr> 
                                 )
                             })}
@@ -305,7 +351,7 @@ const Orders = ({allOrders}) => {
                             <tr className='new-order'>
                                  
                               
-                                <td></td>
+                                <td><input  className='number'{...register("id", { required: true })} value={orders.length + 1 }  /></td>
                                 <td><input value={textInputValue || ''} {...register("article", { required: true, minLength: 3 })} onChange={(e) => {
                                     searchArt(e.target.value)
                                     handleTextInputChange(e.target.value) 
@@ -328,17 +374,21 @@ const Orders = ({allOrders}) => {
                                     setValue('totalSalary', totalSalary)
                                 }}>Добавить продукт</button>
                     </form>
-                    <button className='addedOrder' onClick={() => {
-                        const Order = {barcodeOrders: `${++allOrders[allOrders.length-1].barcodeOrders}`, master, products: orders}
-                        newOrder(Order).then(() => window.location.reload() )
-                        
+                    <button className='addedOrder' onClick={() => { 
+                        const Order = {barcodeOrders: `${++allOrders[0].barcodeOrders}`, master, products: orders}
+      
+                        Order.products.length ?  newOrder(Order).then(() => window.location.reload() ) : setError(true)
+                        //
                     }}>Создать новый наряд</button>
                 </Accordion.Body>
             </Accordion.Item>
             </Accordion>
+
         </div>
     )
 }
 
 
 export default Orders
+ 
+
