@@ -38,7 +38,7 @@ const App = () => {
     useEffect(()=> {
    
         const newArticleSummaries = allOrders.reduce((accumulator, order) => {
-            if (order.status !== "Упакован") {
+            if (order.status !== "Готов") {
               order.products.forEach(product => {
                 const article = product.article;
                 const quantity = product.quantity;
