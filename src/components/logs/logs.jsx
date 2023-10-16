@@ -8,12 +8,25 @@ function Logs({show, setShow, logs}) {
   const [newLogs, setNewLogs] = useState([])
 
   useEffect(() => {
-    setNewLogs(logs)
+    setNewLogs(logs.sort(compareWithCurrentDate))
   }, [logs])
  
+  console.log(logs)
   const sortLogsDate = (e) => { 
    setNewLogs(logs.filter(log => log.date.slice(0,10) === e.target.value))
   }
+
+// Функция для сортировки по ближайшей дате к текущей дате
+function compareWithCurrentDate(a, b) {
+  const currentDate = new Date();
+  const dateA = new Date(a.date);
+  const dateB = new Date(b.date);
+
+  const differenceA = Math.abs(currentDate - dateA);
+  const differenceB = Math.abs(currentDate - dateB);
+
+  return differenceA - differenceB;
+}
 
   const resetNewLogs = () => {
     setNewLogs(logs)
