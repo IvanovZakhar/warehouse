@@ -20,7 +20,7 @@ const AppInfo = ({setShow}) => {
                     <Nav.Link href="/orders" style={{color: 'white',  }}  >Наряды</Nav.Link> 
                     <Nav.Link href="/print-table" style={{color: 'white'}}  >Печать</Nav.Link>
                     <Nav.Link  onClick={() => window.open('https://orders-products-z4dj.vercel.app/list-order?', '_blank')}  style={{color: 'white'}}  >Проверить сборщика</Nav.Link>
-
+                    <Nav.Link href="/orders-conditioners" style={{color: 'white'}}  >Корзины/козырьки</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>

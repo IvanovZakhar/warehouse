@@ -10,6 +10,7 @@ import Category from '../category/category';
 import useWarehouseService from '../../services/warehouse-services';
 import PrintTable from '../printTable/print-table';
 import Button from 'react-bootstrap/Button'; 
+import OrdersConditioners from '../orders-conditioners/orders-conditioners';
 
 const App = () => {
     const [show, setShow] = useState(false);
@@ -127,6 +128,8 @@ const App = () => {
                 }/>  
                  <Route path="/orders" element ={ <Orders allOrders={allOrders}/>}/>
                  <Route path="/print-table" element ={ <PrintTable data={data} setCategory={setCategory} setSort={setSort} setShow={setShow}/>}/>
+                 <Route path="/orders-conditioners" element={<OrdersConditioners/>} />
+
               </Routes>
             </BrowserRouter>
         )
