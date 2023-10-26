@@ -11,14 +11,12 @@ const useWarehouseService = () => {
 // Получение текущей даты и времени в Московском времени
 const moscowTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
 const currentDateTime = new Date(moscowTime);
-const currentFormattedDate = currentDateTime.toISOString().slice(0, 19) + 'Z';
-console.log('Текущая дата и время в Московском времени:', currentFormattedDate);
+const currentFormattedDate = currentDateTime.toISOString().slice(0, 19) + 'Z'; 
 
 // Получение даты и времени через неделю от текущего времени в Московском времени
 const nextWeekDateTime = new Date(currentDateTime);
 nextWeekDateTime.setDate(nextWeekDateTime.getDate() + 10);
-const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
-console.log('Дата и время через неделю в Московском времени:', nextWeekFormattedDate);
+const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z'; 
 
 
 

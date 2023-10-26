@@ -264,7 +264,7 @@ const Orders = ({allOrders}) => {
                              
                         </tbody>
                     </Table>
-                    <button onClick={() => saveAsPDF(`${barcodeOrders}`)}>Сохранить</button>
+                    <button onClick={() => saveAsPDF(`${barcodeOrders}`)}>Печать</button>
                 </Accordion.Body>
             </Accordion.Item>
         )
@@ -379,7 +379,7 @@ const Orders = ({allOrders}) => {
       
                         Order.products.length ?  newOrder(Order).then(() => window.location.reload() ) : setError(true)
                         //
-                    }}>Создать новый наряд</button>
+                    }}>Создать этот наряд</button>
                 </Accordion.Body>
             </Accordion.Item>
             </Accordion>
