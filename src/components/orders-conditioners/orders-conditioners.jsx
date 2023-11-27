@@ -29,7 +29,7 @@ const OrdersConditioners = () => {
     
     
     console.log(ordersOzn)
-    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный' || item.productName.slice(0, 7) === 'Корзина' || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО') 
+    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный' || item.productName.slice(0, 7) === 'Корзина' || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО' || item.productArt.slice(0, 4) === 'AR46') 
     const sortedElems = elems.sort((a, b) => new Date(a.date) - new Date(b.date))
     
     function updateChecked(e, postingNumber) {
