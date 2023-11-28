@@ -22,8 +22,7 @@ const App = () => {
     const [originalData, setOriginalData] = useState([])
     const [search, setSearch] = useState('')
     const [allOrders, setAllOrders] = useState([]) 
-    const [articleSummaries, setArticleSummaries] = useState({});
-
+    const [articleSummaries, setArticleSummaries] = useState({});  
 
     useEffect(()=>{
        
@@ -101,7 +100,7 @@ const App = () => {
             product.article.toLowerCase().includes(search.toLowerCase())
           ))
     }, [search])
-    
+    console.log(JSON.parse(localStorage.getItem('readyPosting')))
         return( 
             <BrowserRouter basename="/">
               <Routes>
@@ -128,7 +127,7 @@ const App = () => {
                 }/>  
                  <Route path="/orders" element ={ <Orders allOrders={allOrders}/>}/>
                  <Route path="/print-table" element ={ <PrintTable data={data} setCategory={setCategory} setSort={setSort} setShow={setShow}/>}/>
-                 <Route path="/orders-conditioners" element={<OrdersConditioners/>} />
+                 <Route path="/orders-conditioners" element={<OrdersConditioners />} />
 
               </Routes>
             </BrowserRouter>

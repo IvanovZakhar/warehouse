@@ -14,6 +14,7 @@ import React from 'react';
 import CloseButton from 'react-bootstrap/CloseButton'; 
 import ReactPaginate from 'react-paginate'; 
 import Toast from 'react-bootstrap/Toast';
+import Notification from '../notification/notification';
 
 const Orders = ({allOrders}) => {
     const [orders, setOrders] = useState([])
@@ -271,8 +272,7 @@ const Orders = ({allOrders}) => {
     })
     console.log(document.documentElement.clientHeight)
     return(
-        <div className="Orders" >
-    
+        <div className="Orders" > 
             <AppInfo/>
             <Toast style={{display: `${error ? 'block' : 'none'}`,position: 'sticky', top: `20px`, right: '10px', zIndex: '10', backgroundColor: 'yellow'}}>
                 <Toast.Header onClick={() => {setError(false)}}>
