@@ -33,7 +33,7 @@ const Notification = () => {
 
     return(
         <>
-        {allNotification.map(item =>  <NotificationItem item={item}/>)}
+        {allNotification.map((item, i) =>  <NotificationItem item={item} i={i}/>)}
         </>
     )
 
@@ -41,14 +41,14 @@ const Notification = () => {
 
 export default Notification
 
-const NotificationItem = ({item}) => {
+const NotificationItem = ({item, i}) => {
     const [show, setShow] = useState(true);
     return(
-        <Toast style={{position: 'absolute', right: '15px', top: '10px'}} 
+        <Toast style={{position: 'absolute', right: '15px', top: `${i}00px`}} 
                bg="secondary" 
                show={show} 
                onClose={() => setShow(!show)}
-                >
+                key={i}>
             <Toast.Header>
                 <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
                 <strong className="me-auto">Новый заказ</strong> 
