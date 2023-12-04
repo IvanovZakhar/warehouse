@@ -13,6 +13,7 @@ const Notification = () => {
                 'Client-Id': `${item.clientId}` ,
                 'Api-Key': `${item.apiKey}`
              } 
+             console.log(item)
              getAllOrdersOZN(headersOzn).then(data => setOrdersOzn(prevOzn => {
                 return[...prevOzn, ...data]
                 

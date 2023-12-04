@@ -100,7 +100,7 @@ const App = () => {
             product.article.toLowerCase().includes(search.toLowerCase())
           ))
     }, [search])
-    console.log(JSON.parse(localStorage.getItem('readyPosting')))
+
         return( 
             <BrowserRouter basename="/">
               <Routes>
