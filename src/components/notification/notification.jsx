@@ -45,7 +45,7 @@ export default Notification
 const NotificationItem = ({item, i}) => {
     const [show, setShow] = useState(true);
     return(
-        <Toast style={{position: 'absolute', right: '15px', top: `${i}00px`}} 
+        <Toast style={{position: 'absolute', right: '15px', top: `${i}0px`}} 
                bg="secondary" 
                show={show} 
                onClose={() => setShow(!show)}
