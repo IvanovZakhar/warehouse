@@ -14,14 +14,19 @@
 
  .search__art{
     position: absolute;
-    left: 40px;
+    left: 80px;
     list-style: none;
-    top: 40px;
+    top: 40px;  
+ 
  }
 
  .search__art-item{
     height: 30px;
     border-bottom: 2px solid black; 
+    img{
+      height: 30px;
+      border-bottom: 2px solid black; 
+    }
  }
 
  .search__art-item:hover{

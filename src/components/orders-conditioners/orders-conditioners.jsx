@@ -8,7 +8,7 @@ import './orders-conditioners.scss'
 
 const OrdersConditioners = () => {
     const [ordersOzn, setOrdersOzn] = useState([])
-    const {getAllOrdersOZN} = useWarehouseService()
+    const {getAllOrdersOZN, getAllOrdersYandex } = useWarehouseService()
     const [checkedPostings, setCheckedPostings] = useState([]);
 
     useEffect(() => {  
@@ -24,6 +24,23 @@ const OrdersConditioners = () => {
         })
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
         setCheckedPostings(elems.map(item => item.postingNumber))
+        // Заказы с Яндекс
+        // getAllOrdersYandex().then(data => {
+        //     const orders = data.map(item => {
+        //         return{
+        //             postingNumber: item.id, 
+        //             date: item.delivery.shipments.shipmentDate, 
+        //             productArt: item.items[0].offerId,
+        //             productName: item.items[0].offerName, 
+        //             quantity: item.items[0].count, 
+        //             warehouse: 'Яндекс'
+        //         }
+        //     })
+        //     setOrdersOzn(prevOzn => {
+        //         return[...prevOzn, ...orders]
+                
+        //      })
+        // })
     }, [])
 
  

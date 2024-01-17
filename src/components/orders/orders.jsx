@@ -86,30 +86,37 @@ const Orders = ({allOrders}) => {
     }
  
  
-    const searchArt = (search) =>{
-        if(search){
-            
-             setElemsSearch(products.filter(product =>
+    const searchArt = (search) => {
+        console.log(search)
+        if (search) {
+            setElemsSearch(products.filter(product =>
                 product.article.toLowerCase().includes(search.toLowerCase())
-              ))
-            
+            ));
         }
-        const res = elemsSearch.map(item => {
-            const {article, name_of_product} = item 
-            return(
-                <li className='search__art-item' onClick={() => {
-                     setSearchRes({article, name_of_product})
-                     handleSuggestionClick(article, name_of_product)
-                }}>{item.article}</li>
-            )
-        })
-       
-        return(
-             <ul className='search__art'>
+    
+        const limitedResults = elemsSearch.slice(0, 6); // Ограничение до 7 элементов
+    
+        const res = limitedResults.map(item => {
+        
+            const { article, name_of_product, main_photo_link } = item;
+            return (
+                <li className='search__art-item' onClick={(e) => {
+                    // e.target.parentNode.style.display = 'none'
+                    setSearchRes({ article, name_of_product });
+                    handleSuggestionClick(article, name_of_product);
+                }}>
+                    <img src={main_photo_link} alt="photo-product" />
+                    {item.article}</li>
+            );
+        });
+    
+        return (
+            <ul className='search__art' >
                 {res}
-             </ul>
-        )
+            </ul>
+        );
     }
+    
     const Pagination = ({ data, itemsPerPage }) => {
         const [currentPage, setCurrentPage] = useState(0);
       

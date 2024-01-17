@@ -91,6 +91,13 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         return res.result.postings.map(transformProduct)
     }
 
+    const getAllOrdersYandex = async () => { 
+      
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/yandex-orders`, 'GET');
+         
+        return res.orders
+    }
+
     const transformProduct = (product) => {
         
         return{
@@ -112,7 +119,8 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         getAllLogs, 
         newOrder,
         getAllOrders, 
-        getAllOrdersOZN
+        getAllOrdersOZN, 
+        getAllOrdersYandex 
     }
 }
 
