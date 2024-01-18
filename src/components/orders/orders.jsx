@@ -153,7 +153,8 @@ const Orders = ({allOrders}) => {
                 <option value="Зеленов">Зеленов</option>
                 <option value="Храмов">Храмов</option>
                 <option value="Иванов">Иванов</option> 
-                <option value="Орехов">Орехов</option>   
+                <option value="Орехов">Орехов</option> 
+                <option value="Вильданов">Вильданов</option>  
             </select>
         </>
       ))
