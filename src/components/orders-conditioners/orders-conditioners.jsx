@@ -25,28 +25,35 @@ const OrdersConditioners = () => {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
         setCheckedPostings(elems.map(item => item.postingNumber))
         // Заказы с Яндекс
-        // getAllOrdersYandex().then(data => {
-        //     const orders = data.map(item => {
-        //         return{
-        //             postingNumber: item.id, 
-        //             date: item.delivery.shipments.shipmentDate, 
-        //             productArt: item.items[0].offerId,
-        //             productName: item.items[0].offerName, 
-        //             quantity: item.items[0].count, 
-        //             warehouse: 'Яндекс'
-        //         }
-        //     })
-        //     setOrdersOzn(prevOzn => {
-        //         return[...prevOzn, ...orders]
-                
-        //      })
-        // })
+        getAllOrdersYandex().then(data => {
+            const processOrders = data.filter(item => item.status === 'PROCESSING')
+            console.log(processOrders)
+            const orders = processOrders.reduce((result, order) => {
+                const orderItems = order.items.map(item => ({
+                    postingNumber: order.id,
+                    date: order.delivery.shipments[0].shipmentDate,
+                    productArt: item.offerId,
+                    productName: item.offerName,
+                    quantity: item.count,
+                    warehouse: 'Яндекс'
+                }));
+        
+                return [...result, ...orderItems];
+            }, []);
+        console.log(orders)
+            setOrdersOzn(prevOzn => [...prevOzn, ...orders]);
+        });
+        
     }, [])
 
  
     
   
-    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный' || item.productName.slice(0, 7) === 'Корзина' || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО' || item.productArt.slice(0, 4) === 'AR46') 
+    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный' 
+                                        || item.productName.slice(0, 7) === 'Корзина' 
+                                        || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО' 
+                                        || item.productArt.slice(0, 4) === 'AR46' 
+                                        || item.productArt.slice(0, 4) === 'AR18') 
     const sortedElems = elems.sort((a, b) => new Date(a.date) - new Date(b.date))
     
     function updateChecked(e, postingNumber) {
