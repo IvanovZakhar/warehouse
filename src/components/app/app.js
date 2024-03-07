@@ -11,6 +11,7 @@ import useWarehouseService from '../../services/warehouse-services';
 import PrintTable from '../printTable/print-table';
 import Button from 'react-bootstrap/Button'; 
 import OrdersConditioners from '../orders-conditioners/orders-conditioners';
+import RefreshOnIdle from '../refresh-on-idle/refresh-on-idle';
 
 const App = () => {
     const [show, setShow] = useState(false);
@@ -122,7 +123,7 @@ const App = () => {
                                   </Button> 
                                </div>
                         <WarehouseList category={category} logs={logs} sort={sort} data={data} allOrders={allOrders}/>
-                            
+                        <RefreshOnIdle/>
                     </div>
                 }/>  
                  <Route path="/orders" element ={ <Orders allOrders={allOrders}/>}/>
