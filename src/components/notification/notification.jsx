@@ -53,7 +53,7 @@ const NotificationItem = ({item, i}) => {
             <Toast.Header>
                 <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
                 <strong className="me-auto">Новый заказ</strong> 
-                <small className="text-muted">{`${item.date.slice(8, 10)}.${item.date.slice(5, 7)}.${item.date.slice(2, 4)}`}</small>
+                <small className="text-muted">{item.date}</small>
             </Toast.Header>
             <Toast.Body>{item.productName }</Toast.Body>
         </Toast>

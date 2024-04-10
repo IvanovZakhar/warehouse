@@ -25,7 +25,8 @@ const OrdersConditioners = () => {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
         setCheckedPostings(elems.map(item => item.postingNumber))
         // Заказы с Яндекс
-        getAllOrdersYandex().then(data => {
+        getAllOrdersYandex(49023774)
+            .then(data => {
             const processOrders = data.filter(item => item.status === 'PROCESSING')
             console.log(processOrders)
             const orders = processOrders.reduce((result, order) => {
@@ -43,7 +44,25 @@ const OrdersConditioners = () => {
         console.log(orders)
             setOrdersOzn(prevOzn => [...prevOzn, ...orders]);
         });
-        
+        getAllOrdersYandex(77640946)
+        .then(data => {
+        const processOrders = data.filter(item => item.status === 'PROCESSING')
+        console.log(processOrders)
+        const orders = processOrders.reduce((result, order) => {
+            const orderItems = order.items.map(item => ({
+                postingNumber: order.id,
+                date: order.delivery.shipments[0].shipmentDate,
+                productArt: item.offerId,
+                productName: item.offerName,
+                quantity: item.count,
+                warehouse: 'Яндекс'
+            }));
+    
+            return [...result, ...orderItems];
+        }, []);
+    console.log(orders)
+        setOrdersOzn(prevOzn => [...prevOzn, ...orders]);
+    });
     }, [])
 
  
@@ -53,7 +72,11 @@ const OrdersConditioners = () => {
                                         || item.productName.slice(0, 7) === 'Корзина' 
                                         || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО' 
                                         || item.productArt.slice(0, 4) === 'AR46' 
-                                        || item.productArt.slice(0, 4) === 'AR18') 
+                                        || item.productArt.slice(0, 4) === 'AR18'
+                                        || item.productArt == 'AR75254Ц007-06'
+                                        || item.productArt == 'AR75354Ц007-06'
+                                        || item.productArt == 'AR75554Ц007-06'
+                                        || item.productArt == 'AR75654Ц007-06') 
     const sortedElems = elems.sort((a, b) => new Date(a.date) - new Date(b.date))
     
     function updateChecked(e, postingNumber) {
@@ -99,7 +122,7 @@ const OrdersConditioners = () => {
                         return(
                             <tr> 
                                 <td>{i+1}</td>
-                                <td>{`${date.slice(8, 10)}.${date.slice(5, 7)}.${date.slice(2, 4)}`}</td>
+                                <td>{date}</td>
                                 <td>{postingNumber}</td> 
                                 <td>{productArt}</td>
                                 <td>{productName}</td>

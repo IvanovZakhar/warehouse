@@ -91,9 +91,9 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         return res.result.postings.map(transformProduct)
     }
 
-    const getAllOrdersYandex = async () => { 
+    const getAllOrdersYandex = async (companyId) => { 
       
-        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/yandex-orders`, 'GET');
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/yandex-orders/${companyId}`, 'GET');
          
         return res.orders
     }
@@ -102,14 +102,12 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         
         return{
             postingNumber: product.posting_number,
-            date: product.shipment_date,
+            date: `${product.shipment_date.slice(8, 10)}.${product.shipment_date.slice(5, 7)}.${product.shipment_date.slice(2, 4)}`,
             productArt: product.products[0].offer_id,
             productName: product.products[0].name,
             productPrice: product.products[0].price,
             quantity: product.products[0].quantity,
-            warehouse: product.delivery_method.warehouse,
-            
-        
+            warehouse: product.delivery_method.warehouse, 
         } 
      }
 
