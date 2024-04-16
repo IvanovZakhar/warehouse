@@ -60,11 +60,13 @@ const OrdersConditioners = () => {
     
             return [...result, ...orderItems];
         }, []);
-    console.log(orders)
+  
         setOrdersOzn(prevOzn => [...prevOzn, ...orders]);
+         setOrdersOzn(prevOrders => prevOrders .sort((a, b) => new Date(a.date) - new Date(b.date)))
     });
     }, [])
 
+    console.log(ordersOzn)
  
     
   
