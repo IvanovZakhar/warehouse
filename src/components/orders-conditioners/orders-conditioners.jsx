@@ -28,11 +28,11 @@ const OrdersConditioners = () => {
         getAllOrdersYandex(49023774)
             .then(data => {
             const processOrders = data.filter(item => item.status === 'PROCESSING')
-            console.log(processOrders)
+           
             const orders = processOrders.reduce((result, order) => {
                 const orderItems = order.items.map(item => ({
                     postingNumber: order.id,
-                    date: order.delivery.shipments[0].shipmentDate,
+                    date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(6,11)}`,
                     productArt: item.offerId,
                     productName: item.offerName,
                     quantity: item.count,
@@ -47,11 +47,11 @@ const OrdersConditioners = () => {
         getAllOrdersYandex(77640946)
         .then(data => {
         const processOrders = data.filter(item => item.status === 'PROCESSING')
-        console.log(processOrders)
+       
         const orders = processOrders.reduce((result, order) => {
             const orderItems = order.items.map(item => ({
                 postingNumber: order.id,
-                date: order.delivery.shipments[0].shipmentDate,
+                date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(6,11)}`,
                 productArt: item.offerId,
                 productName: item.offerName,
                 quantity: item.count,
@@ -61,14 +61,19 @@ const OrdersConditioners = () => {
             return [...result, ...orderItems];
         }, []);
   
-        setOrdersOzn(prevOzn => [...prevOzn, ...orders]);
-         setOrdersOzn(prevOrders => prevOrders .sort((a, b) => new Date(a.date) - new Date(b.date)))
+        setOrdersOzn(prevOzn => [...prevOzn, ...orders]);    
+     
     });
+   
     }, [])
 
-    console.log(ordersOzn)
- 
     
+ 
+    function parseDate(str) {
+        const [day, month, year] = str.split('.').map(Number);
+        // Добавляем 2000 к двузначному году
+        return new Date(year + 2000, month - 1, day);
+      }
   
     const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный' 
                                         || item.productName.slice(0, 7) === 'Корзина' 
@@ -79,8 +84,8 @@ const OrdersConditioners = () => {
                                         || item.productArt == 'AR75354Ц007-06'
                                         || item.productArt == 'AR75554Ц007-06'
                                         || item.productArt == 'AR75654Ц007-06') 
-    const sortedElems = elems.sort((a, b) => new Date(a.date) - new Date(b.date))
-    
+    const sortedElems = elems.sort((a, b) => parseDate(a.date) - parseDate(b.date))
+   
     function updateChecked(e, postingNumber) {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
         const existingItem = elems.find(item => item.postingNumber === postingNumber);
