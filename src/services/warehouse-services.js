@@ -87,8 +87,9 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
 
 
     const getAllOrdersOZN = async (headersDef) => {  
-        const res = await request(`https://api-seller.ozon.ru/v3/posting/fbs/unfulfilled/list`, 'POST', formData, headersDef );  
-        return res.result.postings.map(transformProduct)
+        const res = await request(`${_url}/arsenal-orders`, 'GET' );  
+       
+        return res.map(transformProduct)
     }
 
     const getAllOrdersYandex = async (companyId) => { 
@@ -103,11 +104,11 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         return{
             postingNumber: product.posting_number,
             date: `${product.shipment_date.slice(8, 10)}.${product.shipment_date.slice(5, 7)}.${product.shipment_date.slice(2, 4)}`,
-            productArt: product.products[0].offer_id,
-            productName: product.products[0].name,
-            productPrice: product.products[0].price,
-            quantity: product.products[0].quantity,
-            warehouse: product.delivery_method.warehouse, 
+            productArt: product.offer_id,
+            productName: product.name,
+            productPrice: product.price,
+            quantity: product.quantity,
+            warehouse: product.warehouse, 
         } 
      }
 

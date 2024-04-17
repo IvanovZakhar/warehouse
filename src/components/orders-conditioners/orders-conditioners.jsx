@@ -11,80 +11,74 @@ const OrdersConditioners = () => {
     const {getAllOrdersOZN, getAllOrdersYandex } = useWarehouseService()
     const [checkedPostings, setCheckedPostings] = useState([]);
 
-    useEffect(() => {  
-        JSON.parse(localStorage.getItem('apiData')).forEach(item => {
-            const headersOzn = {  
-                'Client-Id': `${item.clientId}` ,
-                'Api-Key': `${item.apiKey}`
-             } 
-             getAllOrdersOZN(headersOzn).then(data => setOrdersOzn(prevOzn => {
-                return[...prevOzn, ...data]
-                
-             }))
-        })
-        let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
-        setCheckedPostings(elems.map(item => item.postingNumber))
-        // Заказы с Яндекс
-        getAllOrdersYandex(49023774)
-            .then(data => {
-            const processOrders = data.filter(item => item.status === 'PROCESSING')
-           
-            const orders = processOrders.reduce((result, order) => {
-                const orderItems = order.items.map(item => ({
-                    postingNumber: order.id,
-                    date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(6,11)}`,
-                    productArt: item.offerId,
-                    productName: item.offerName,
-                    quantity: item.count,
-                    warehouse: 'Яндекс'
-                }));
+    useEffect(() => {   
         
-                return [...result, ...orderItems];
-            }, []);
-        console.log(orders)
-            setOrdersOzn(prevOzn => [...prevOzn, ...orders]);
-        });
-        getAllOrdersYandex(77640946)
-        .then(data => {
-        const processOrders = data.filter(item => item.status === 'PROCESSING')
+        getAllOrdersOZN().then(ordersOzon => {
+            getAllOrdersYandex(49023774) 
+            .then(dataYandex => { 
+            const processOrders = dataYandex.filter(item => item.status === 'PROCESSING') 
+            
+            const ordersYandex = processOrders.reduce((result, order) => { 
+                const orderItems = order.items.map(item => ({ 
+                    postingNumber: order.id, 
+                    date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(8,11)}`, 
+                    productArt: item.offerId, 
+                    productName: item.offerName, 
+                    quantity: item.count, 
+                    warehouse: 'Яндекс' 
+                })); 
+         
+                return [...result, ...orderItems]; 
+            }, []); 
+        
+                getAllOrdersYandex(77640946) 
+                    .then(dataYandexLarge => { 
+                    const processOrders = dataYandexLarge.filter(item => item.status === 'PROCESSING') 
+                    
+                    const ordersYandexLarge = processOrders.reduce((result, order) => { 
+                        const orderItems = order.items.map(item => ({ 
+                            postingNumber: order.id, 
+                            date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(8,11)}`, 
+                            productArt: item.offerId, 
+                            productName: item.offerName, 
+                            quantity: item.count, 
+                            warehouse: 'Яндекс' 
+                        })); 
+                
+                        return [...result, ...orderItems]; 
+            }, []); 
        
-        const orders = processOrders.reduce((result, order) => {
-            const orderItems = order.items.map(item => ({
-                postingNumber: order.id,
-                date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(6,11)}`,
-                productArt: item.offerId,
-                productName: item.offerName,
-                quantity: item.count,
-                warehouse: 'Яндекс'
-            }));
-    
-            return [...result, ...orderItems];
-        }, []);
+            setOrdersOzn([...ordersYandex, ...ordersYandexLarge, ...ordersOzon, ]);     
+          
+            }); 
+        }); 
+        }) 
+      
+        let elems = JSON.parse(localStorage.getItem('readyPosting')) || []; 
+        setCheckedPostings(elems.map(item => item.postingNumber)) 
   
-        setOrdersOzn(prevOzn => [...prevOzn, ...orders]);    
-     
-    });
-   
-    }, [])
-
-    
+    }, []) 
  
-    function parseDate(str) {
-        const [day, month, year] = str.split('.').map(Number);
-        // Добавляем 2000 к двузначному году
-        return new Date(year + 2000, month - 1, day);
-      }
+     console.log(ordersOzn)
   
-    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный' 
-                                        || item.productName.slice(0, 7) === 'Корзина' 
-                                        || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО' 
-                                        || item.productArt.slice(0, 4) === 'AR46' 
-                                        || item.productArt.slice(0, 4) === 'AR18'
-                                        || item.productArt == 'AR75254Ц007-06'
-                                        || item.productArt == 'AR75354Ц007-06'
-                                        || item.productArt == 'AR75554Ц007-06'
-                                        || item.productArt == 'AR75654Ц007-06') 
+    function parseDate(str) { 
+        const [day, month, year] = str.split('.').map(Number); 
+        // Добавляем 2000 к двузначному году 
+        return new Date(year + 2000, month - 1, day); 
+      } 
+   
+    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный'  
+                                        || item.productName.slice(0, 7) === 'Корзина'  
+                                        || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО'  
+                                        || item.productArt.slice(0, 4) === 'AR46'  
+                                        || item.productArt.slice(0, 4) === 'AR18' 
+                                        || item.productArt == 'AR75254Ц007-06' 
+                                        || item.productArt == 'AR75354Ц007-06' 
+                                        || item.productArt == 'AR75554Ц007-06' 
+                                        || item.productArt == 'AR75654Ц007-06')  
     const sortedElems = elems.sort((a, b) => parseDate(a.date) - parseDate(b.date))
+    
+    
    
     function updateChecked(e, postingNumber) {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
@@ -102,9 +96,9 @@ const OrdersConditioners = () => {
         setCheckedPostings(elems.map(item => item.postingNumber)); // Обновляем массив checkedPostings
     }
     
+     
     
-    
-    
+     
     
     return(
         <div className="app">
