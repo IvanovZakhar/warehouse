@@ -75,8 +75,9 @@ const OrdersConditioners = () => {
                                         || item.productArt == 'AR75254Ц007-06' 
                                         || item.productArt == 'AR75354Ц007-06' 
                                         || item.productArt == 'AR75554Ц007-06' 
-                                        || item.productArt == 'AR75654Ц007-06')  
-    const sortedElems = elems.sort((a, b) => parseDate(a.date) - parseDate(b.date))
+                                        || item.productArt == 'AR75654Ц007-06') 
+    const newElem = elems.filter(item => item.productArt !== 'кб850' && item.productArt !== 'кб850У'); 
+    const sortedElems = newElem.sort((a, b) => parseDate(a.date) - parseDate(b.date))
     
     
    
