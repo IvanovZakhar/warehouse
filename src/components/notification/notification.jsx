@@ -30,11 +30,13 @@ const Notification = () => {
             return item
         }
     })
- 
-
+   
+    console.log(allNotification)
     return(
         <>
-        {allNotification.map((item, i) =>  <NotificationItem item={item} i={i}/>)}
+        {allNotification.length >=5 ?    
+            <NotificationDefault/> : 
+                allNotification.map((item, i) =>  <NotificationItem item={item} i={i}/>)}
         </>
     )
 
@@ -43,19 +45,39 @@ const Notification = () => {
 export default Notification
 
 const NotificationItem = ({item, i}) => {
+    console.log(item)
+    const [show, setShow] = useState(true);
+   
+        return(
+            <Toast style={{position: 'absolute', right: '15px', top: `${i}0px`}} 
+                   bg="secondary" 
+                   show={show} 
+                   onClose={() => setShow(!show)}
+                    key={i}>
+                <Toast.Header>
+                    <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+                    <strong className="me-auto">Новый заказ</strong> 
+                    <small className="text-muted">{item.date}</small>
+                </Toast.Header>
+                <Toast.Body>{item.productName }</Toast.Body>
+            </Toast>
+        )
+  
+
+}
+
+const NotificationDefault = () => {
     const [show, setShow] = useState(true);
     return(
-        <Toast style={{position: 'absolute', right: '15px', top: `${i}0px`}} 
-               bg="secondary" 
-               show={show} 
-               onClose={() => setShow(!show)}
-                key={i}>
+        <Toast style={{position: 'absolute', right: '15px', top: `10px`}} 
+                bg="secondary"  
+                show={show} 
+                onClose={() => setShow(!show)}>
             <Toast.Header>
                 <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
-                <strong className="me-auto">Новый заказ</strong> 
-                <small className="text-muted">{item.date}</small>
+                <strong className="me-auto">Новые заказы</strong>  
             </Toast.Header>
-            <Toast.Body>{item.productName }</Toast.Body>
+            <Toast.Body>Поступили новые заказы</Toast.Body>
         </Toast>
     )
 }

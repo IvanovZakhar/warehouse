@@ -45,8 +45,7 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         const res = await request(
                                     `${_url}/products-for-warehouse`, 
                                     'GET' 
-                                    )
-      
+                                    ) 
         return res
     }
 
@@ -109,6 +108,7 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
             productPrice: product.price,
             quantity: product.quantity,
             warehouse: product.warehouse, 
+            company: product.company
         } 
      }
 

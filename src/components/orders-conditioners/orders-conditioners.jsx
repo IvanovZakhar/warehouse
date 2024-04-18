@@ -5,11 +5,14 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Table from 'react-bootstrap/Table';
 import './orders-conditioners.scss'
+import InfoTableOrders from "../InfoTableOrders/InfoTableOrders";
 
 const OrdersConditioners = () => {
-    const [ordersOzn, setOrdersOzn] = useState([])
+    const [orders, setOrders] = useState([])
     const {getAllOrdersOZN, getAllOrdersYandex } = useWarehouseService()
     const [checkedPostings, setCheckedPostings] = useState([]);
+    const [ordersYandex, setOrdersYandex] = useState([])
+    const [ordersOzn, setOrdersOzn] = useState([])
 
     useEffect(() => {   
         
@@ -42,13 +45,15 @@ const OrdersConditioners = () => {
                             productArt: item.offerId, 
                             productName: item.offerName, 
                             quantity: item.count, 
-                            warehouse: 'Яндекс' 
+                            warehouse: 'Яндекс' ,
+                            company: "КГТ"
                         })); 
                 
                         return [...result, ...orderItems]; 
             }, []); 
-       
-            setOrdersOzn([...ordersYandex, ...ordersYandexLarge, ...ordersOzon, ]);     
+            setOrdersYandex([...ordersYandex, ...ordersYandexLarge])
+            setOrdersOzn(ordersOzon)
+            setOrders([...ordersYandex, ...ordersYandexLarge, ...ordersOzon, ]);     
           
             }); 
         }); 
@@ -59,7 +64,7 @@ const OrdersConditioners = () => {
   
     }, []) 
  
-     console.log(ordersOzn)
+   
   
     function parseDate(str) { 
         const [day, month, year] = str.split('.').map(Number); 
@@ -67,9 +72,8 @@ const OrdersConditioners = () => {
         return new Date(year + 2000, month - 1, day); 
       } 
    
-    const elems = ordersOzn.filter(item => item.productName.slice(0, 8) === 'Защитный'  
-                                        || item.productName.slice(0, 7) === 'Корзина'  
-                                        || item.warehouse.slice(0, 9) === 'ПАРГОЛОВО'  
+    const elems = orders.filter(item => item.productName.slice(0, 8) === 'Защитный'  
+                                        || item.productName.slice(0, 7) === 'Корзина'     
                                         || item.productArt.slice(0, 4) === 'AR46'  
                                         || item.productArt.slice(0, 4) === 'AR18' 
                                         || item.productArt == 'AR75254Ц007-06' 
@@ -103,6 +107,7 @@ const OrdersConditioners = () => {
     
     return(
         <div className="app">
+           <InfoTableOrders ordersOzn={ordersOzn} allOrdersYandex={ordersYandex}/>
             <AppInfo/>
             <Table striped bordered hover>
                 <thead>
