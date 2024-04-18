@@ -122,7 +122,7 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
       
     return(
         <div className="info-table-order">
-            <ListGroup style={{position: 'absolute', left: '50px', top: '120px'}}>   
+            <ListGroup style={{position: 'absolute', left: '1px', top: '120px'}}>   
                     <ListGroup.Item  style={{padding: '0px'}}>              
                         <Badge style={{fontSize: '32px', display: 'flex', height: '35px',  color: 'black', padding: '13px 3px  0px 3px',}} bg="light">
                             
@@ -171,7 +171,7 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
                 </ListGroup.Item>
 
             </ListGroup>
-            <ListGroup style={{ position: 'absolute', right: '50px', top: '120px'}}>   
+            <ListGroup style={{ position: 'absolute', right: '1px', top: '120px'}}>   
                     <ListGroup.Item  style={{padding: '0px'}}>              
                         <Badge style={{fontSize: '12px', width: '330px',display: 'flex',justifyContent: 'space-between',borderBottom: '1px solid black', height: '35px',  color: 'black', padding: '13px 3px  0px 3px',}} bg="light">
                             
