@@ -92,18 +92,9 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
         return `${year}-${month}-${day}`;
       }
       
-      function getTomorrowDate() {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-      
-        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const day = String(tomorrow.getDate()).padStart(2, '0');
-        const year = tomorrow.getFullYear();
-      
-        return `${year}-${month}-${day}`;
-      }
+ 
 
+      const date = new Date();
       function formatToDate(dateString) {
         // Разделяем входную строку - теперь следим за порядком - [дд, мм, гг]
         const dateParts = dateString.split('.');
@@ -118,6 +109,45 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
         return `${year}-${month}-${day}`;
       }
       
+
+      
+      function getTomorrowDate() {
+    
+        let dayPlus = getDayPlus(getDayOfWeek(date))
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + dayPlus);
+      
+        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const day = String(tomorrow.getDate()).padStart(2, '0');
+        const year = tomorrow.getFullYear();
+      
+        return `${year}-${month}-${day}`;
+      }
+
+      function getDayOfWeek(date, num) {
+        const dayNames = [
+          'Воскресенье',
+          'Понедельник',
+          'Вторник',
+          'Среда',
+          'Четверг',
+          'Пятница',
+          'Суббота'
+        ]; 
+        return dayNames[num ? num : date.getDay()];
+      }
+
+      function getDayPlus (getDayOfWeek) {
+        switch(getDayOfWeek) {
+            case 'Пятница':   
+                return 3 
+            case 'Суббота':  
+                return 2 
+            default:
+             return 1
+          }
+      } 
     
       
     return(
@@ -175,8 +205,9 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
                     <ListGroup.Item  style={{padding: '0px'}}>              
                         <Badge style={{fontSize: '12px', width: '330px',display: 'flex',justifyContent: 'space-between',borderBottom: '1px solid black', height: '35px',  color: 'black', padding: '13px 3px  0px 3px',}} bg="light">
                             
+                           
                             <span style={{padding: '0px',  display: 'flex',   }}>
-                                {`Завтра`}   
+                                { getDayOfWeek(date, getDayPlus(getDayOfWeek(date)) - 2).length >= 6 ? `${getDayOfWeek(date, getDayPlus(getDayOfWeek(date)) - 2).slice(0, 5)}.` : getDayOfWeek(date, getDayPlus(getDayOfWeek(date)) - 2)}   
                             </span>
                             <span style={{padding: '0px',  display: 'flex',  justifyContent: 'space-between',}}>
                             {`${ getTomorrowDate().slice(8,10)}.${ getTomorrowDate().slice(5,7)}.${ getTomorrowDate().slice(0,4)}`}    
