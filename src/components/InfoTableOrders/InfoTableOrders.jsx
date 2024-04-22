@@ -204,11 +204,7 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
             <ListGroup style={{ position: 'absolute', right: '1px', top: '120px'}}>   
                     <ListGroup.Item  style={{padding: '0px'}}>              
                         <Badge style={{fontSize: '12px', width: '330px',display: 'flex',justifyContent: 'space-between',borderBottom: '1px solid black', height: '35px',  color: 'black', padding: '13px 3px  0px 3px',}} bg="light">
-                            
-                           
-                            <span style={{padding: '0px',  display: 'flex',   }}>
-                                { getDayOfWeek(date, getDayPlus(getDayOfWeek(date)) - 2).length >= 6 ? `${getDayOfWeek(date, getDayPlus(getDayOfWeek(date)) - 2).slice(0, 5)}.` : getDayOfWeek(date, getDayPlus(getDayOfWeek(date)) - 2)}   
-                            </span>
+                              
                             <span style={{padding: '0px',  display: 'flex',  justifyContent: 'space-between',}}>
                             {`${ getTomorrowDate().slice(8,10)}.${ getTomorrowDate().slice(5,7)}.${ getTomorrowDate().slice(0,4)}`}    
 
