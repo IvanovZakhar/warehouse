@@ -56,9 +56,11 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
         if(allOrdersYandex.length){
             
             const ordersToday = allOrdersYandex.filter(order => { 
-                const currentDate =  formatToDate (order.date) 
-                const todayDate = getCurrentDate() 
-                return currentDate == todayDate  
+                if(order.status == "PROCESSING"){ 
+                    const currentDate =  formatToDate (order.date) 
+                    const todayDate = getCurrentDate() 
+                    return currentDate == todayDate  
+                }
             }) 
             const ordersLarge = ordersToday.filter(orders => orders.company == 'КГТ')
             const ordersYandex = ordersToday.filter(orders => !orders.company )
@@ -67,9 +69,11 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex}) => {
             setOrdersYandex(ordersYandex )
             
             const ordersTomorrow  = allOrdersYandex.filter(order => { 
-                const currentDate =  formatToDate (order.date)
-                const tomorrowDate = getTomorrowDate()
-                return currentDate == tomorrowDate
+                if(order.status == "PROCESSING"){ 
+                    const currentDate =  formatToDate (order.date)
+                    const tomorrowDate = getTomorrowDate()
+                    return currentDate == tomorrowDate
+                }
             })
         
             const ordersLargeTomorrow = ordersTomorrow.filter(orders => orders.company == 'КГТ')
