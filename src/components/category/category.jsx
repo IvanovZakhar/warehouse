@@ -18,6 +18,21 @@ const Category = ({setCategory, setSort, setShow}) => {
                     Решетки  
                 </Button>
             </li>
+            <li className='category__item'  > 
+                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                    Козырьки  
+                </Button>
+            </li>
+            <li className='category__item'  > 
+                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                    Лестницы 
+                </Button>
+            </li>
+            <li className='category__item'  > 
+                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                    Перила 
+                </Button>
+            </li>
             <li className='category__item' text="dark" > 
                 <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Перголы   
@@ -39,20 +54,16 @@ const Category = ({setCategory, setSort, setShow}) => {
                 </Button>
             </li>
             <li className='category__item'  > 
-                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                <Button variant="secondary" style={{marginTop: '10px', backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Память  
                 </Button>
             </li>
             <li className='category__item'  > 
-                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
+                <Button variant="secondary" style={{marginTop: '10px', backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Дровницы
                 </Button>
             </li>
-            <li className='category__item'  > 
-                <Button variant="secondary" style={{ backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
-                    Козырьки  
-                </Button>
-            </li>
+        
             <li className='category__item'  > 
                 <Button variant="secondary" style={{marginTop: '10px', backgroundColor: '#3d5a80' }} onClick={(e) => setCategory(e.target.innerHTML) }>
                     Противоугонные
