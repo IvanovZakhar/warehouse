@@ -12,8 +12,7 @@ const Notification = () => {
             const headersOzn = {  
                 'Client-Id': `${item.clientId}` ,
                 'Api-Key': `${item.apiKey}`
-             } 
-             console.log(item)
+             }  
              getAllOrdersOZN(headersOzn).then(data => setOrdersOzn(prevOzn => {
                 return[...prevOzn, ...data]
                 
@@ -31,7 +30,7 @@ const Notification = () => {
         }
     })
    
-    console.log(allNotification)
+    
     return(
         <>
         {allNotification.length >=5 ?    
@@ -44,8 +43,7 @@ const Notification = () => {
 
 export default Notification
 
-const NotificationItem = ({item, i}) => {
-    console.log(item)
+const NotificationItem = ({item, i}) => { 
     const [show, setShow] = useState(true);
    
         return(
