@@ -75,8 +75,10 @@ const Orders = ({allOrders}) => {
     const handleTextInputChange = (e) => {
         setValue('textInput', e); // Обновляем значение текстового поля
       }; 
+
     // Обработчик выбора предложенного ответа
     const handleSuggestionClick = (value, name) => {
+        console.log(name)
         setValue('article', value);
         setValue('name_of_product', name);
         setValue('textInput', value); // Устанавливаем значение текстового поля
@@ -92,35 +94,36 @@ const Orders = ({allOrders}) => {
     }
  
  
-    // const searchArt = (search) => { 
-    //     if (search) {
-    //         setElemsSearch(products.filter(product =>
-    //             product.article.toLowerCase().includes(search.toLowerCase())
-    //         ));
-    //     }
+    const searchArt = (search) => { 
+        if (search) {
+            setElemsSearch(products.filter(product =>
+                product.article.toLowerCase().includes(search.toLowerCase())
+            ));
+        }
     
-    //     const limitedResults = elemsSearch.slice(0, 6); // Ограничение до 7 элементов
+        const limitedResults = elemsSearch.slice(0, 6); // Ограничение до 7 элементов
     
-    //     const res = limitedResults.map(item => {
+        const res = limitedResults.map(item => {
         
-    //         const { article, name_of_product, main_photo_link } = item;
-    //         return (
-    //             <li className='search__art-item' onClick={(e) => {
-    //                 // e.target.parentNode.style.display = 'none'
-    //                 setSearchRes({ article, name_of_product });
-    //                 handleSuggestionClick(article, name_of_product);
-    //             }}>
-    //                 <img src={main_photo_link} alt="photo-product" />
-    //                 {item.article}</li>
-    //         );
-    //     });
+            const { article, name_of_product, main_photo_link } = item;
+            return (
+                <li className='search__art-item' onClick={(e) => {
+                    // e.target.parentNode.style.display = 'none'
+                    setSearchRes({ article, name_of_product });
+                    handleSuggestionClick(article, name_of_product);
+                    onSetNameProduct(article)
+                }}>
+                    <img src={main_photo_link} alt="photo-product" />
+                    {item.article}</li>
+            );
+        });
     
-    //     return (
-    //         <ul className='search__art' >
-    //             {res}
-    //         </ul>
-    //     );
-    // }
+        return (
+            <ul className='search__art' >
+                {res}
+            </ul>
+        );
+    }
     
     const Pagination = ({ data, itemsPerPage }) => {
         const [currentPage, setCurrentPage] = useState(0);
@@ -377,7 +380,7 @@ const Orders = ({allOrders}) => {
                             <tr className='new-order'> 
                                 <td><input  className='number'{...register("id", { required: true })} value={orders.length + 1 }  /></td>
                                 <td><input value={textInputValue || ''} {...register("article", { required: true, minLength: 3 })} onChange={(e) => {
-                                    // searchArt(e.target.value)
+                                    searchArt(e.target.value)
                                     handleTextInputChange(e.target.value)
                                     onSetNameProduct(e.target.value)} }/> </td> 
                                 <td>{nameProduct}</td> 
@@ -386,7 +389,7 @@ const Orders = ({allOrders}) => {
                                 <td>{ totalSalary} </td> 
                                 <td><input  className='number'{...register("quantityCompl", { required: true })} /></td> 
                                 <td><Select   {...register("worker")} /></td>
-                                
+                                {searchArt()}
                                 
                             </tr>
                            
