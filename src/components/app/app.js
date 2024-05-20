@@ -28,8 +28,9 @@ const App = () => {
     useEffect(()=>{
        
         getAllProducts().then(data => {
-            setData(data)
-            setOriginalData(data)
+            const newData = data.filter(item => !item.hide)
+            setData(newData)
+            setOriginalData(newData)
             getAllOrders().then(setAllOrders)
         })
       
