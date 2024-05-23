@@ -90,7 +90,7 @@ const OrdersConditioners = () => {
         const existingItem = elems.find(item => item.postingNumber === postingNumber);
         if (e.target.checked) {
             if (!existingItem) {
-                elems.push({ postingNumber, checked: true });
+                elems.push({ postingNumber, checked: true , date});
             }
         } else {
             if (existingItem) {
@@ -139,7 +139,7 @@ const OrdersConditioners = () => {
                                        <input type="checkbox" 
                                               className="checker-orders" 
                                               id="scales" name="scales"  
-                                              onClick={(e) => updateChecked(e, postingNumber)} 
+                                              onClick={(e) => updateChecked(e, postingNumber, date)} 
                                               checked={isChecked}/> 
                                     }</td>
                             </tr>
