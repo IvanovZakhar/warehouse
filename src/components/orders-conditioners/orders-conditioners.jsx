@@ -92,16 +92,15 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
     function updateChecked(e, postingNumber, date) {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
     
-        // Преобразовываем текущую дату в начало дня для корректного сравнения
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        elems.filter(item => !item.date)
+        // // Преобразовываем текущую дату в начало дня для корректного сравнения
+        // const today = new Date();
+        // today.setHours(0, 0, 0, 0); 
 
-        // Фильтруем массив, удаляем элементы с датами ранее сегодняшней
-        elems = elems.filter(item => {
-            const itemDate = convertStringToDate(item.date); 
-            return itemDate >= today;
-        });
+        // // Фильтруем массив, удаляем элементы с датами ранее сегодняшней
+        // elems = elems.filter(item => {
+        //     const itemDate = convertStringToDate(item.date); 
+        //     return itemDate >= today;
+        // });
     
         // Поиск существующего элемента
         const existingItem = elems.find(item => item.postingNumber === postingNumber);
@@ -156,7 +155,7 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
 
             <AppInfo/>
             <InfoTableOrders ordersOzn={ordersOzn} allOrdersYandex={ordersYandex} logs={logs} productsOrdersBarcode={productsOrdersBarcode} allOrdersWB={allOrdersWB}/>
-            <OtherProducts/>
+            <OtherProducts />
             <Table striped bordered hover>
                 <thead>
                     <tr>
