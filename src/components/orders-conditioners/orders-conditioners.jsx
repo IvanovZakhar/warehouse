@@ -155,7 +155,7 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
 
             <AppInfo/>
             <InfoTableOrders ordersOzn={ordersOzn} allOrdersYandex={ordersYandex} logs={logs} productsOrdersBarcode={productsOrdersBarcode} allOrdersWB={allOrdersWB}/>
-            <OtherProducts />
+        
             <Table striped bordered hover>
                 <thead>
                     <tr>
