@@ -17,13 +17,15 @@ const App = () => {
     const [show, setShow] = useState(false);
     const [category, setCategory] = useState('')
     const [sort, setSort] = useState('')
-    const {getAllLogs, getAllProducts,  getAllOrders} = useWarehouseService()
+    const {getAllLogs, getAllProducts,  getAllOrders, getProductsForOrdersBarcode, getAllOrdersWB} = useWarehouseService()
     const [logs, setLogs] = useState([]) 
     const [data, setData] = useState([])
     const [originalData, setOriginalData] = useState([])
     const [search, setSearch] = useState('')
     const [allOrders, setAllOrders] = useState([]) 
     const [articleSummaries, setArticleSummaries] = useState({});  
+    const [productsOrdersBarcode, setProductsOrdersBarcode] = useState([])
+    const [allOrdersWB, setAllOrdersWB] = useState([])
 
     useEffect(()=>{
        
@@ -35,8 +37,27 @@ const App = () => {
         })
       
         getAllLogs().then(setLogs)
+        getProductsForOrdersBarcode().then(setProductsOrdersBarcode)
+         // Получаем текущую дату
+        const currentDate = new Date();
+
+        // Дата неделю назад
+        const weekAgo = new Date();
+        weekAgo.setDate(currentDate.getDate() - 7);
+
+        // Дата неделю вперед
+        const weekLater = new Date();
+        weekLater.setDate(currentDate.getDate() + 2);
+        
+
+        getAllOrdersWB(weekAgo.toISOString().split('T')[0], weekLater.toISOString().split('T')[0], JSON.parse(localStorage.apiData)[2].apiKey).then(res => {
+          console.log(res)
+          setAllOrdersWB(res)
+        })
     }, [])
 
+
+    console.log(allOrdersWB)
     useEffect(()=> {
    
         const newArticleSummaries = allOrders.reduce((accumulator, order) => {
@@ -129,7 +150,7 @@ const App = () => {
                 }/>  
                  <Route path="/orders" element ={ <Orders allOrders={allOrders}/>}/>
                  <Route path="/print-table" element ={ <PrintTable data={data} setCategory={setCategory} setSort={setSort} setShow={setShow}/>}/>
-                 <Route path="/orders-conditioners" element={<OrdersConditioners />} />
+                 <Route path="/orders-conditioners" element={<OrdersConditioners logs={logs} productsOrdersBarcode={productsOrdersBarcode} allOrdersWB={allOrdersWB}/>} />
 
               </Routes>
             </BrowserRouter>

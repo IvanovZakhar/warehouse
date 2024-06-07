@@ -6,10 +6,8 @@ import Notification from './components/notification/notification';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-   
      <App/>
- 
-   
+
 );
 
 

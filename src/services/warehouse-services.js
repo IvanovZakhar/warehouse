@@ -77,11 +77,39 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         return res
     }
 
+    const getAllOrdersWB = async (dateFrom, dateTo, apiKey) => {  
+        const unixDateFrom = getNewDate(dateFrom)
+        const unixDateTo = getNewDate(dateTo)
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/wb-orders/${unixDateFrom}/${unixDateTo}`, 'GET', null );
+         
+        return res.orders
+    }
+
+    const getStickersWB = async (apiKey, body) => {   
+    
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/wb-stickers`, 'POST', body); 
+        return res.stickers
+    }
+
+    function getNewDate (date) {
+        // Создаем объект Date из строки
+        const dateObject = new Date(date);
+
+        // Получаем Unix timestamp (количество миллисекунд с 1 января 1970 года)
+        const unixTimestamp = dateObject.getTime();
+        return  Math.floor(unixTimestamp / 1000);
+
+}
     
     const getAllOrders = async () => { 
         const res = await request(`${_url}/all-orders-warehouse`, 
                                     'GET') 
         return res
+    }
+    
+    const getProductsForOrdersBarcode = async () => {
+        const res = await request(`${_url}/products-for-orders-barcode`, 'GET');
+    return res 
     }
 
 
@@ -119,7 +147,10 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         newOrder,
         getAllOrders, 
         getAllOrdersOZN, 
-        getAllOrdersYandex 
+        getAllOrdersYandex,
+        getProductsForOrdersBarcode, 
+        getAllOrdersWB, 
+        getStickersWB 
     }
 }
 
