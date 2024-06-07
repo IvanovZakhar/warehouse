@@ -6,6 +6,7 @@ import { useState } from "react";
 import Table from 'react-bootstrap/Table';
 import './orders-conditioners.scss'
 import InfoTableOrders from "../InfoTableOrders/InfoTableOrders";
+import OtherProducts from "../other-products/other-products";
 
 const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
     const [orders, setOrders] = useState([])
@@ -150,10 +151,12 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
      
     
     return(
-        <div className="app">
-           
+        <div className="app"> 
+        
+
             <AppInfo/>
             <InfoTableOrders ordersOzn={ordersOzn} allOrdersYandex={ordersYandex} logs={logs} productsOrdersBarcode={productsOrdersBarcode} allOrdersWB={allOrdersWB}/>
+            <OtherProducts/>
             <Table striped bordered hover>
                 <thead>
                     <tr>
