@@ -1,0 +1,21 @@
+form{
+    display: flex; 
+    flex-direction: column;
+    input{
+        width: 150px;
+    } 
+}
+
+.other-products{
+    display: flex;
+    flex-wrap: wrap;
+    width: 390px;
+}
+
+.buttons{
+    display: flex;
+    width: 300px;
+    button{
+        margin-left: 10px;
+    }
+}

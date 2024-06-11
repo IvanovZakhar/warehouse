@@ -49,6 +49,15 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         return res
     }
 
+    const getAllProductsMarket = async () => {
+        
+        const res = await request(
+                                    `${_url}/allproducts`, 
+                                    'GET' 
+                                    ) 
+        return res
+    }
+
     const updateProduct = async (data) => {
         const res = await request(
             `${_url}/update/products-for-warehouse/`, 
@@ -85,16 +94,32 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         return res.orders
     }
 
-    const getStickersWB = async (apiKey, body) => {   
-    
+    const getStickersWB = async (apiKey, body) => {    
         const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/wb-stickers`, 'POST', body); 
         return res.stickers
     }
 
+    const addOtherProduct = async (body) => {     
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/add-other-product`, 'POST', JSON.stringify(body)); 
+ 
+        return res
+    }
+
+    const addNewOtherProducts = async (body) => {    
+        console.log(body) 
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/add-new-otherproducts`, 'POST', JSON.stringify(body)); 
+        return res
+    }
+
+
+    const getOtherProducts = async (body) => {     
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/all-other-products`, 'GET'); 
+        return res
+    }
+
     function getNewDate (date) {
         // Создаем объект Date из строки
-        const dateObject = new Date(date);
-
+        const dateObject = new Date(date); 
         // Получаем Unix timestamp (количество миллисекунд с 1 января 1970 года)
         const unixTimestamp = dateObject.getTime();
         return  Math.floor(unixTimestamp / 1000);
@@ -150,7 +175,12 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
         getAllOrdersYandex,
         getProductsForOrdersBarcode, 
         getAllOrdersWB, 
-        getStickersWB 
+        getStickersWB,
+        getAllProductsMarket,
+        addOtherProduct, 
+        getOtherProducts,
+        addNewOtherProducts,
+        loading
     }
 }
 

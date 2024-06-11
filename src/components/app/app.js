@@ -51,13 +51,12 @@ const App = () => {
         
 
         getAllOrdersWB(weekAgo.toISOString().split('T')[0], weekLater.toISOString().split('T')[0], JSON.parse(localStorage.apiData)[2].apiKey).then(res => {
-          console.log(res)
+      
           setAllOrdersWB(res)
         })
     }, [])
 
-
-    console.log(allOrdersWB)
+ 
     useEffect(()=> {
    
         const newArticleSummaries = allOrders.reduce((accumulator, order) => {

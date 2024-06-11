@@ -48,9 +48,10 @@ const Orders = ({allOrders}) => {
      
     const totalSalary = salaryValue * quantityValue;
   
-    const handleSalaryChange = (e) => {
+    const handleSalaryChange = (e) => { 
       setSalaryValue(e.target.value); 
     };
+ 
   
     const handleQuantityChange = (e) => {
       setQuantityValue(e.target.value);  
@@ -88,6 +89,7 @@ const Orders = ({allOrders}) => {
         getAllProducts().then(setProducts) 
     }, [])
 
+    console.log(products)
  
     const deleteItem = (i) => {
         setOrders(prevOrders => prevOrders.filter(item => item.id !== i))
@@ -170,19 +172,37 @@ const Orders = ({allOrders}) => {
  
 
       const saveAsPDF = async (id) => {
-        const input = document.getElementById(`${id}`);
-      
-        const canvas = await html2canvas(input);
-        const pdf = new jsPDF('p', 'mm', 'a4'); // Задаем книжный формат
-      
-        const imgData = canvas.toDataURL('image/jpeg', 1.0); // Улучшаем качество, используя image/jpeg
-      
+        const input = document.getElementById(id);
+        
+        // Убедимся, что все изображения загружены
+        await Promise.all(Array.from(input.querySelectorAll('img')).map(img => {
+            if (img.complete && img.naturalHeight !== 0) {
+                return Promise.resolve();
+            }
+            return new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+        }));
+        
+        // Теперь все изображения загружены, можно рендерить PDF
+        const canvas = await html2canvas(input, {
+            useCORS: true, // Это позволяет использовать изображения с других доменов с поддержкой CORS
+            allowTaint: false, // Это должно быть false, чтобы избежать загрязнения canvas
+            scrollX: 0,
+            scrollY: -window.scrollY
+        });
+        
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        
+        const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
+        
         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${id}__${new Date()}.pdf`);
-      };
+        pdf.save(`${id}__${new Date().toISOString()}.pdf`);
+    };
+    
        
       const Barcode = ({barcodeOrders}) => {
         const options = {
@@ -205,9 +225,10 @@ const Orders = ({allOrders}) => {
       }; 
       const itemsPerPage = 10;
       const elem =newOrders.map(order => {   
-        const {barcodeOrders, createdAt, master, products, status} = order
+        const {barcodeOrders, createdAt, master, status} = order
         const newDate = `${createdAt.slice(8,10)}.${createdAt.slice(5,7)}.${createdAt.slice(0,4)}`
         const newTime = `${+createdAt.slice(11,13) + 3}:${createdAt.slice(14,16)}` 
+      
         return(
             <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
                 <Accordion.Header >
@@ -225,19 +246,20 @@ const Orders = ({allOrders}) => {
                     <thead>
                         <tr>
                             <th className='item_time'>
-                                Дата 
+                                
+                            </th>
+                            <th className='item_time' style={{fontSize: '16px'}}>
+                                 Дата 
                                 <br/>
                                 <Badge bg="secondary">{newDate}</Badge> 
                                 <br/> 
-                            </th>
-                            <th className='item_time'>
                                 Время
                                 <br/>
                                 <Badge bg="secondary">{newTime}</Badge>
                             </th>
                             <th colSpan={3}> 
                              {<Barcode barcodeOrders={barcodeOrders}/>}</th>
-                            <th colSpan={2} style={{fontSize: '24px'}}>
+                            <th colSpan={3} style={{fontSize: '24px'}}>
                                 Статус
                                 <br/>
                                 <Badge bg={ status === "Упакован" ?  "success" :  "primary"   } 
@@ -253,6 +275,7 @@ const Orders = ({allOrders}) => {
                             <tr>
                                 <th>№</th>
                                 <th>Артикул</th>
+                                <th>Фото</th>
                                 <th>Название</th>
                                 <th>3пл/шт.</th>
                                 <th>Кол-во</th>
@@ -262,12 +285,15 @@ const Orders = ({allOrders}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product, i) => {
+                            {order.products.map((product, i) => {
                                 const {article, name_of_product, salary, quantity, quantityCompl, worker} = product
+                                const photo = products.filter(product => product.article.slice(0, 8) == article.slice(0, 8))
+                                console.log(photo)
                                 return(
                                     <tr key={i}>
                                         <td>{i+1}</td>
                                         <td className='item_orders'>{article}</td>
+                                        <td className='item_orders'><img src = {photo[0].main_photo_link} style={{width: '70px'}}/></td>
                                         <td className='item_orders'>{name_of_product}</td>
                                         <td className='item_orders'>{salary}</td>
                                         <td className='item_orders'>{quantity}</td>

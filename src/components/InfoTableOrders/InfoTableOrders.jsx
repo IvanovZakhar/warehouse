@@ -119,21 +119,40 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex, logs, productsOrdersBarcod
       }, [ordersOzn, logs, productsOrdersBarcode, allOrdersWB])
 
 
-    useEffect(() => { 
-        if(allOrdersWB){ 
-            const packedOrdersWB = allOrdersWB.filter(orderWb => {
+      useEffect(() => {
+        if(allOrdersWB){  
+            const packedOrdersWB = allOrdersWB.filter(orderWb => { 
                 const res = logs.filter(log => log.comment == orderWb.id)
-                if(!res.length){
-                    return orderWb.id
-                }
-            }) 
+                if(!res.length){ 
+                    return true;
+                } 
+                return false;
+            })  
             const orders = packedOrdersWB.map(order => order.id)
-          
-            getStickersWB([], JSON.stringify({'orders': orders})).then(setOrdersNotPackedWb)
-        }
-
-    }, [allOrdersWB])
+ 
+            
+            // Разбиваем orders на части по 100 элементов
+            const chunkSize = 100;
+            const chunks = [];
+            for(let i = 0; i < orders.length; i += chunkSize) {
+                const chunkOrders = orders.slice(i, i + chunkSize);
+                chunks.push(getStickersWB([], JSON.stringify({'orders': chunkOrders})));
+            }
     
+            // Ожидаем завершения всех асинхронных вызовов
+            Promise.all(chunks)
+                .then((values) => {
+                    // Объединение результатов (пример для сценария, когда результат - массив)
+                    const combinedResults = [].concat(...values); 
+                    setOrdersNotPackedWb(combinedResults);
+                })
+                .catch((error) => {
+                    console.error('Ошибка при обработке запросов:', error);
+                });
+        } 
+    }, [allOrdersWB]);
+    
+     
  
 
       useEffect(() => {  
@@ -265,17 +284,17 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex, logs, productsOrdersBarcod
       
     return( 
         <>
-        <Button variant="primary" onClick={handleShow}>
+        <Button variant="primary" onClick={handleShow} style={{width: '100%'}}>
             Показать общее кол-во заказов
         </Button>
 
-        <Offcanvas show={show} onHide={handleClose} placement={'top'} style={{backgroundColor: 'rgba(255, 255, 128, .1);'}}>
+        <Offcanvas show={show} onHide={handleClose} placement={'top'}   style={{height: '350px'}} >
         <Offcanvas.Header closeButton  > 
         <Offcanvas.Title>Заказы с Маркетплейсов:</Offcanvas.Title>
         </Offcanvas.Header >
-        <Offcanvas.Body   >
+        <Offcanvas.Body  >
             <div className="info-table-order">
-                <ListGroup style={{position: 'absolute', left: '350px', top: '20px'}}>   
+                <ListGroup style={{ left: '350px', top: '20px'}}>   
                         <ListGroup.Item  style={{padding: '0px'}}>              
                             <Badge style={{fontSize: '32px', display: 'flex', height: '35px',  color: 'black', padding: '13px 3px  0px 3px',}} bg="light">
                                 
@@ -341,7 +360,7 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex, logs, productsOrdersBarcod
                 </ListGroup>
          
 
-                <ListGroup style={{marginLeft: '20px', position: 'absolute', right: '350px', top: '20px'}}>   
+                <ListGroup style={{marginLeft: '20px',  right: '350px', top: '20px'}}>   
                     <ListGroup.Item  style={{padding: '0px'}}>              
                         <Badge style={{fontSize: '32px', width: '330px',display: 'flex',justifyContent: 'space-between',borderBottom: '1px solid black', height: '35px',  color: 'black', padding: '13px 3px  0px 3px',}} bg="light">
                             

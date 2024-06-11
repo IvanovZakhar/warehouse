@@ -140,14 +140,7 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
         }
     
         return new Date(year, month - 1, day); // Month - 1, потому что месяцы начинаются с 0
-    }
-    
-
-    
-    
-     
-    
-     
+    } 
     
     return(
         <div className="app"> 
@@ -155,7 +148,7 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
 
             <AppInfo/>
             <InfoTableOrders ordersOzn={ordersOzn} allOrdersYandex={ordersYandex} logs={logs} productsOrdersBarcode={productsOrdersBarcode} allOrdersWB={allOrdersWB}/>
-        
+            <OtherProducts />
             <Table striped bordered hover>
                 <thead>
                     <tr>
