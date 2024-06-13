@@ -93,14 +93,14 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
     
         // // Преобразовываем текущую дату в начало дня для корректного сравнения
-        // const today = new Date();
-        // today.setHours(0, 0, 0, 0); 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); 
 
         // // Фильтруем массив, удаляем элементы с датами ранее сегодняшней
-        // elems = elems.filter(item => {
-        //     const itemDate = convertStringToDate(item.date); 
-        //     return itemDate >= today;
-        // });
+        elems = elems.filter(item => {
+            const itemDate = convertStringToDate(item.date); 
+            return itemDate >= today;
+        });
     
         // Поиск существующего элемента
         const existingItem = elems.find(item => item.postingNumber === postingNumber);
