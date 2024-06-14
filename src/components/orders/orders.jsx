@@ -165,7 +165,7 @@ const Orders = ({allOrders}) => {
                 <option value="Иванов">Иванов</option> 
                 <option value="Орехов">Орехов</option> 
                 <option value="Вильданов">Вильданов</option>  
-                <option value="Вильданов">Лавренов</option>  
+                <option value="Лавренович">Лавренович</option>  
             </select>
         </>
       ))
