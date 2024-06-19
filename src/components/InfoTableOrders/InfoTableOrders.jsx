@@ -156,7 +156,7 @@ const InfoTableOrders = ({ordersOzn, allOrdersYandex, logs, productsOrdersBarcod
  
 
       useEffect(() => {  
-
+        console.log(allOrdersYandex)
         const packedOrdersYandex = allOrdersYandex.map(item =>{  
             const filtRes = logs.find(log => log.comment == item.postingNumber)  
             if(filtRes){

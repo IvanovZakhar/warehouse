@@ -29,7 +29,8 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
                     productArt: item.offerId, 
                     productName: item.offerName, 
                     quantity: item.count, 
-                    warehouse: 'Яндекс' 
+                    warehouse: 'Яндекс' ,
+                    company: order.company ? order.company : null
                 })); 
          
                 return [...result, ...orderItems]; 
