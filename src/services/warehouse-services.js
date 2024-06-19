@@ -146,9 +146,9 @@ const nextWeekFormattedDate = nextWeekDateTime.toISOString().slice(0, 19) + 'Z';
 
     const getAllOrdersYandex = async (companyId) => { 
       
-        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/yandex-orders/${companyId}`, 'GET');
+        const res = await request(`https://f9fd09879062.vps.myjino.ru:49256/yandex-orders `, 'GET');
          
-        return res.orders
+        return res 
     }
 
     const transformProduct = (product) => {

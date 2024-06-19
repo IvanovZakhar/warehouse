@@ -35,28 +35,9 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
                 return [...result, ...orderItems]; 
             }, []); 
         
-                getAllOrdersYandex(77640946) 
-                    .then(dataYandexLarge => { 
-                    const processOrders = dataYandexLarge.filter(item => item.status === 'PROCESSING') 
-                    
-                    const ordersYandexLarge = processOrders.reduce((result, order) => { 
-                        const orderItems = order.items.map(item => ({ 
-                            postingNumber: order.id, 
-                            date: `${order.delivery.shipments[0].shipmentDate.slice(0,2)}.${order.delivery.shipments[0].shipmentDate.slice(3,5)}.${order.delivery.shipments[0].shipmentDate.slice(8,11)}`, 
-                            productArt: item.offerId, 
-                            productName: item.offerName, 
-                            quantity: item.count, 
-                            warehouse: 'Яндекс' ,
-                            company: "КГТ"
-                        })); 
-                
-                        return [...result, ...orderItems]; 
-            }, []); 
-            setOrdersYandex([...ordersYandex, ...ordersYandexLarge])
+            setOrdersYandex(ordersYandex)
             setOrdersOzn(ordersOzon)
-            setOrders([...ordersYandex, ...ordersYandexLarge, ...ordersOzon, ]);     
-          
-            }); 
+            setOrders([...ordersYandex,   ...ordersOzon]);     
         }); 
         }) 
       
