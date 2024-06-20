@@ -79,8 +79,7 @@ const Orders = ({allOrders}) => {
       }; 
 
     // Обработчик выбора предложенного ответа
-    const handleSuggestionClick = (value, name) => {
-        console.log(name)
+    const handleSuggestionClick = (value, name) => { 
         setValue('article', value);
         setValue('name_of_product', name);
         setValue('textInput', value); // Устанавливаем значение текстового поля
@@ -89,8 +88,7 @@ const Orders = ({allOrders}) => {
     useEffect(()=>{
         getAllProducts().then(setProducts) 
     }, [])
-
-    console.log(products)
+ 
  
     const deleteItem = (i) => {
         setOrders(prevOrders => prevOrders.filter(item => item.id !== i))
@@ -292,7 +290,7 @@ const Orders = ({allOrders}) => {
                                 {order.products.map((product, i) => {
                                     const {article, name_of_product, salary, quantity, quantityCompl, worker} = product
                                     const photo = products.filter(product => product.article.slice(0, 8) == article.slice(0, 8))
-                                    console.log(photo)
+                                   
                                     return(
                                         <tr key={i}>
                                             <td>{i+1}</td>
@@ -320,15 +318,13 @@ const Orders = ({allOrders}) => {
 
 
     function onSetNameProduct (article) {
-        const name = products.filter(product => product.article == article)
-        console.log(name)
+        const name = products.filter(product => product.article == article) 
         if(name.length){
             handleSuggestionClick(article, name[0].name_of_product)
         }
         setNameProduct(name.length ? name[0].name_of_product : 'Имя не найдено')
         
-    }
-     console.log(orders)
+    } 
 
     return(
         <>

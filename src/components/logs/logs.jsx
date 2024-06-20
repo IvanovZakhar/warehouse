@@ -10,8 +10,7 @@ function Logs({show, setShow, logs}) {
   useEffect(() => {
     setNewLogs(logs.sort(compareWithCurrentDate))
   }, [logs])
- 
-  console.log(logs)
+  
   const sortLogsDate = (e) => { 
    setNewLogs(logs.filter(log => log.date.slice(0,10) === e.target.value))
   }

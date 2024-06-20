@@ -55,8 +55,7 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
     }, []) 
  
     useEffect(() => {
-        let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
-        console.log(elems)
+        let elems = JSON.parse(localStorage.getItem('readyPosting')) || []; 
     }, [])
   
     function parseDate(str) { 
