@@ -14,11 +14,12 @@ import React from 'react';
 import CloseButton from 'react-bootstrap/CloseButton'; 
 import ReactPaginate from 'react-paginate'; 
 import Toast from 'react-bootstrap/Toast';
+import { ClipLoader } from 'react-spinners';
 import Notification from '../notification/notification';
 
 const Orders = ({allOrders}) => {
     const [orders, setOrders] = useState([])
-    const {getAllProducts, newOrder, getAllOrders} = useWarehouseService()
+    const {getAllProducts, newOrder, getAllOrders, loading} = useWarehouseService()
     const [products, setProducts] = useState([]) 
     const [elemsSearch, setElemsSearch] = useState([])
     const [searchRes, setSearchRes] = useState([]) 
@@ -231,86 +232,89 @@ const Orders = ({allOrders}) => {
         const newTime = `${+createdAt.slice(11,13) + 3}:${createdAt.slice(14,16)}` 
       
         return(
-            <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
-                <Accordion.Header >
-                         {  `  ${newDate} Наряд №${barcodeOrders} `  }
-                        <Badge bg={ status === "Готов" ?  "success" : "primary"   } 
-                                    style={{fontSize: '16px', marginLeft: '10px',  height: '25px', padding: '5px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>
-                                    {status}
-                        </Badge>
-                        
-                  
-                </Accordion.Header>
-                <Accordion.Body>
+            <>
+        
+                <Accordion.Item eventKey={`${barcodeOrders}`} key={barcodeOrders}>
+                    <Accordion.Header >
+                            {  `  ${newDate} Наряд №${barcodeOrders} `  }
+                            <Badge bg={ status === "Готов" ?  "success" : "primary"   } 
+                                        style={{fontSize: '16px', marginLeft: '10px',  height: '25px', padding: '5px', color: 'white', fontSize: '14px', fontWeight: 'bold'}}>
+                                        {status}
+                            </Badge>
+                            
+                    
+                    </Accordion.Header>
+                    <Accordion.Body>
 
-                    <Table striped bordered hover id={`${barcodeOrders}`}> 
-                    <thead>
-                        <tr>
-                            <th className='item_time'>
-                                
-                            </th>
-                            <th className='item_time' style={{fontSize: '16px'}}>
-                                 Дата 
-                                <br/>
-                                <Badge bg="secondary">{newDate}</Badge> 
-                                <br/> 
-                                Время
-                                <br/>
-                                <Badge bg="secondary">{newTime}</Badge>
-                            </th>
-                            <th colSpan={3}> 
-                             {<Barcode barcodeOrders={barcodeOrders}/>}</th>
-                            <th colSpan={3} style={{fontSize: '24px'}}>
-                                Статус
-                                <br/>
-                                <Badge bg={ status === "Упакован" ?  "success" :  "primary"   } 
-                                    style={{fontSize: '16px'}}>
-                                    {status}
-                                </Badge></th>
-                        
-                            <th colSpan={1} className='master'>Мастер
-                            <br/> <Badge bg="secondary">{master}</Badge></th> 
-                        </tr>
-                    </thead>
+                        <Table striped bordered hover id={`${barcodeOrders}`}> 
                         <thead>
                             <tr>
-                                <th>№</th>
-                                <th>Артикул</th>
-                                <th>Фото</th>
-                                <th>Название</th>
-                                <th>3пл/шт.</th>
-                                <th>Кол-во</th>
-                                <th>Общая 3пл/шт.</th>
-                                <th>Кол-во компл.</th>
-                                <th>Сварщик</th>
+                                <th className='item_time'>
+                                    
+                                </th>
+                                <th className='item_time' style={{fontSize: '16px'}}>
+                                    Дата 
+                                    <br/>
+                                    <Badge bg="secondary">{newDate}</Badge> 
+                                    <br/> 
+                                    Время
+                                    <br/>
+                                    <Badge bg="secondary">{newTime}</Badge>
+                                </th>
+                                <th colSpan={3}> 
+                                {<Barcode barcodeOrders={barcodeOrders}/>}</th>
+                                <th colSpan={3} style={{fontSize: '24px'}}>
+                                    Статус
+                                    <br/>
+                                    <Badge bg={ status === "Упакован" ?  "success" :  "primary"   } 
+                                        style={{fontSize: '16px'}}>
+                                        {status}
+                                    </Badge></th>
+                            
+                                <th colSpan={1} className='master'>Мастер
+                                <br/> <Badge bg="secondary">{master}</Badge></th> 
                             </tr>
                         </thead>
-                        <tbody>
-                            {order.products.map((product, i) => {
-                                const {article, name_of_product, salary, quantity, quantityCompl, worker} = product
-                                const photo = products.filter(product => product.article.slice(0, 8) == article.slice(0, 8))
-                                console.log(photo)
-                                return(
-                                    <tr key={i}>
-                                        <td>{i+1}</td>
-                                        <td className='item_orders'>{article}</td>
-                                        <td className='item_orders'><img src = {photo[0].main_photo_link} style={{width: '70px'}}/></td>
-                                        <td className='item_orders'>{name_of_product}</td>
-                                        <td className='item_orders'>{salary}</td>
-                                        <td className='item_orders'>{quantity}</td>
-                                        <td className='item_orders'>{quantity * salary}</td>
-                                        <td className='item_orders'>{quantityCompl}</td> 
-                                        <td className='item_orders'>{worker}</td>
-                                        
-                                    </tr>
-                                )
-                            })}
-                             
-                        </tbody>
-                    </Table>
-                    <button onClick={() => saveAsPDF(`${barcodeOrders}`)}>Печать</button>
-                </Accordion.Body>
-            </Accordion.Item>
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Артикул</th>
+                                    <th>Фото</th>
+                                    <th>Название</th>
+                                    <th>3пл/шт.</th>
+                                    <th>Кол-во</th>
+                                    <th>Общая 3пл/шт.</th>
+                                    <th>Кол-во компл.</th>
+                                    <th>Сварщик</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {order.products.map((product, i) => {
+                                    const {article, name_of_product, salary, quantity, quantityCompl, worker} = product
+                                    const photo = products.filter(product => product.article.slice(0, 8) == article.slice(0, 8))
+                                    console.log(photo)
+                                    return(
+                                        <tr key={i}>
+                                            <td>{i+1}</td>
+                                            <td className='item_orders'>{article}</td>
+                                            <td className='item_orders'><img src = {photo[0].main_photo_link} style={{width: '70px'}}/></td>
+                                            <td className='item_orders'>{name_of_product}</td>
+                                            <td className='item_orders'>{salary}</td>
+                                            <td className='item_orders'>{quantity}</td>
+                                            <td className='item_orders'>{quantity * salary}</td>
+                                            <td className='item_orders'>{quantityCompl}</td> 
+                                            <td className='item_orders'>{worker}</td>
+                                            
+                                        </tr>
+                                    )
+                                })}
+                                
+                            </tbody>
+                        </Table>
+                        <button onClick={() => saveAsPDF(`${barcodeOrders}`)}>Печать</button>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </>
         )
     }) 
 
@@ -327,118 +331,127 @@ const Orders = ({allOrders}) => {
      console.log(orders)
 
     return(
-        <div className="Orders" > 
-            <AppInfo/>
-            <Toast style={{display: `${error ? 'block' : 'none'}`,position: 'sticky', top: `20px`, right: '10px', zIndex: '10', backgroundColor: 'yellow'}}>
-                <Toast.Header onClick={() => {setError(false)}}>
-                    <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
-                    <strong className="me-auto">Внимание</strong> 
-                </Toast.Header>
-                <Toast.Body>Наряд пуст!</Toast.Body>
-            </Toast>
-            <div className='orders__category-sort'>
-                <input type='date' style={{marginTop: '10px'}} onChange={sortOrders}/> 
-                <Button variant="primary" 
-                        style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
-                        onClick={sortOrdersCategory}>Изготовление</Button>{' '} 
-        
-                <Button variant="success" 
-                        style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
-                        onClick={sortOrdersCategory}>Готов</Button>{' '}
-                <Button variant="secondary" onClick={resetNewOrders} style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}>Показать все</Button>
-            </div>
-                
-            <Accordion defaultActiveKey="1" style={{marginTop: '10px'}}> 
-            <Pagination data={elem} itemsPerPage={itemsPerPage} />
-            <Accordion.Item eventKey="1">
-                <Accordion.Header>Создать новый </Accordion.Header>
-                <Accordion.Body>
-                <Table striped bordered hover id={'000002'}> 
-                    <thead>
-                        <tr>
-                            <th colSpan={2}>Дата 
-                            <br/>
-                            <Badge bg="secondary"> 
-                            </Badge></th>
-                            <th colSpan={3}  > 
-                            {/* {<svg className='barcode' ref={inputRef} style={{display: 'block',margin: '0 auto'}}/>} */}
-                            </th> 
-                            <th colSpan={3}>Мастер
-                             <br/>         
-                             <Badge bg="secondary">
-                             <select id="pet-select" onChange={e => setMaster(e.target.value)}>
-                                <option value="">Выберите</option>
-                                <option value="Карлен">Карлен</option>
-                                <option value="Дима">Дима</option> 
-                            </select>
-                            </Badge></th> 
-                        </tr>
-                    </thead>
+        <>
+                     
+                <div className="Orders" > 
+                <AppInfo/>
+                <Toast style={{display: `${error ? 'block' : 'none'}`,position: 'sticky', top: `20px`, right: '10px', zIndex: '10', backgroundColor: 'yellow'}}>
+                    <Toast.Header onClick={() => {setError(false)}}>
+                        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+                        <strong className="me-auto">Внимание</strong> 
+                    </Toast.Header>
+                    <Toast.Body>Наряд пуст!</Toast.Body>
+                </Toast>
+                <div className='orders__category-sort'>
+                    <input type='date' style={{marginTop: '10px'}} onChange={sortOrders}/> 
+                    <Button variant="primary" 
+                            style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
+                            onClick={sortOrdersCategory}>Изготовление</Button>{' '} 
+            
+                    <Button variant="success" 
+                            style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}
+                            onClick={sortOrdersCategory}>Готов</Button>{' '}
+                    <Button variant="secondary" onClick={resetNewOrders} style={{margin: '10px 0 10px 10px', height: '30px', padding: '2px' , fontSize: '14px', fontWeight: 'bold'}}>Показать все</Button>
+                </div>
+                    
+               {   loading ?            
+                     <ClipLoader color="#0d6efd"   cssOverride={{
+                                            width: '100px',
+                                            height: '100px',
+                                            marginLeft: '450px',
+                                            marginTop: '100px' 
+                                        }} /> :  <Accordion defaultActiveKey="1" style={{marginTop: '10px'}}> 
+                <Pagination data={elem} itemsPerPage={itemsPerPage} />
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>Создать новый </Accordion.Header>
+                    <Accordion.Body>
+                    <Table striped bordered hover id={'000002'}> 
                         <thead>
                             <tr>
-                                <th>№</th>
-                                <th>Артикул</th>
-                                <th>Название</th>
-                                <th>3пл/шт.</th>
-                                <th>Кол-во</th>
-                                <th>Общая 3пл/шт.</th>
-                                <th>Кол-во компл.</th>
-                                <th>Сварщик</th>
+                                <th colSpan={2}>Дата 
+                                <br/>
+                                <Badge bg="secondary"> 
+                                </Badge></th>
+                                <th colSpan={3}  > 
+                                {/* {<svg className='barcode' ref={inputRef} style={{display: 'block',margin: '0 auto'}}/>} */}
+                                </th> 
+                                <th colSpan={3}>Мастер
+                                <br/>         
+                                <Badge bg="secondary">
+                                <select id="pet-select" onChange={e => setMaster(e.target.value)}>
+                                    <option value="">Выберите</option>
+                                    <option value="Карлен">Карлен</option>
+                                    <option value="Дима">Дима</option> 
+                                </select>
+                                </Badge></th> 
                             </tr>
                         </thead>
-                        <tbody>
-                            {orders.map((order) => {
-                                return(
-                                    <tr key={order.id}>
-                                        <td>{order.id }</td>
-                                        <td>{order.article}</td>  
-                                        <td>{order.name_of_product}</td>
-                                        <td>{order.salary}</td>
-                                        <td>{order.quantity}</td>
-                                        <td>{order.totalSalary}</td>
-                                        <td>{order.quantityCompl}</td>
-                                        <td>{order.worker}</td>
-                                        <CloseButton onClick={() => deleteItem(order.id)}/>
-                                    </tr> 
-                                )
-                            })}
-                            <br/>
-                             <br/>
-                            <tr className='new-order'> 
-                                <td><input  className='number'{...register("id", { required: true })} value={orders.length + 1 }  /></td>
-                                <td><input value={textInputValue || ''} {...register("article", { required: true, minLength: 3 })} onChange={(e) => {
-                                    searchArt(e.target.value)
-                                    handleTextInputChange(e.target.value)
-                                    onSetNameProduct(e.target.value)} }/> </td> 
-                                <td>{nameProduct}</td> 
-                                <td> <input  className='number'{...register("salary", { required: true })} value={salaryValue} onChange={handleSalaryChange} />  </td> 
-                                <td> <input  className='number'{...register("quantity", { required: true })} value={quantityValue} onChange={handleQuantityChange} />  </td> 
-                                <td>{ totalSalary} </td> 
-                                <td><input  className='number'{...register("quantityCompl", { required: true })} /></td> 
-                                <td><Select   {...register("worker")} /></td>
-                                {searchArt()}
-                                
-                            </tr>
-                           
-                        </tbody>
-                       
-                    </Table>
-                    <form onSubmit={handleSubmit(onSubmit)} > 
-                                <button type='submit' className='addedProd' onClick={() => {
-                                    setValue('totalSalary', totalSalary)
-                                }}>Добавить продукт</button>
-                    </form>
-                    <button className='addedOrder' onClick={() => { 
-                        const Order = {barcodeOrders: `${++allOrders[0].barcodeOrders}`, master, products: orders}
-      
-                        Order.products.length ?  newOrder(Order).then(() => window.location.reload() ) : setError(true)
-                        //
-                    }}>Создать этот наряд</button>
-                </Accordion.Body>
-            </Accordion.Item>
-            </Accordion>
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Артикул</th>
+                                    <th>Название</th>
+                                    <th>3пл/шт.</th>
+                                    <th>Кол-во</th>
+                                    <th>Общая 3пл/шт.</th>
+                                    <th>Кол-во компл.</th>
+                                    <th>Сварщик</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.map((order) => {
+                                    return(
+                                        <tr key={order.id}>
+                                            <td>{order.id }</td>
+                                            <td>{order.article}</td>  
+                                            <td>{order.name_of_product}</td>
+                                            <td>{order.salary}</td>
+                                            <td>{order.quantity}</td>
+                                            <td>{order.totalSalary}</td>
+                                            <td>{order.quantityCompl}</td>
+                                            <td>{order.worker}</td>
+                                            <CloseButton onClick={() => deleteItem(order.id)}/>
+                                        </tr> 
+                                    )
+                                })}
+                                <br/>
+                                <br/>
+                                <tr className='new-order'> 
+                                    <td><input  className='number'{...register("id", { required: true })} value={orders.length + 1 }  /></td>
+                                    <td><input value={textInputValue || ''} {...register("article", { required: true, minLength: 3 })} onChange={(e) => {
+                                        searchArt(e.target.value)
+                                        handleTextInputChange(e.target.value)
+                                        onSetNameProduct(e.target.value)} }/> </td> 
+                                    <td>{nameProduct}</td> 
+                                    <td> <input  className='number'{...register("salary", { required: true })} value={salaryValue} onChange={handleSalaryChange} />  </td> 
+                                    <td> <input  className='number'{...register("quantity", { required: true })} value={quantityValue} onChange={handleQuantityChange} />  </td> 
+                                    <td>{ totalSalary} </td> 
+                                    <td><input  className='number'{...register("quantityCompl", { required: true })} /></td> 
+                                    <td><Select   {...register("worker")} /></td>
+                                    {searchArt()}
+                                    
+                                </tr>
+                            
+                            </tbody>
+                        
+                        </Table>
+                        <form onSubmit={handleSubmit(onSubmit)} > 
+                                    <button type='submit' className='addedProd' onClick={() => {
+                                        setValue('totalSalary', totalSalary)
+                                    }}>Добавить продукт</button>
+                        </form>
+                        <button className='addedOrder' onClick={() => { 
+                            const Order = {barcodeOrders: `${++allOrders[0].barcodeOrders}`, master, products: orders}
+        
+                            Order.products.length ?  newOrder(Order).then(() => window.location.reload() ) : setError(true)
+                            //
+                        }}>Создать этот наряд</button>
+                    </Accordion.Body>
+                </Accordion.Item>
+                </Accordion>}
 
-        </div>
+                </div>
+        </>
     )
 }
 

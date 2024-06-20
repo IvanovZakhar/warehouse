@@ -17,7 +17,7 @@ const App = () => {
     const [show, setShow] = useState(false);
     const [category, setCategory] = useState('')
     const [sort, setSort] = useState('')
-    const {getAllLogs, getAllProducts,  getAllOrders, getProductsForOrdersBarcode, getAllOrdersWB} = useWarehouseService()
+    const {getAllLogs, getAllProducts,  getAllOrders, getProductsForOrdersBarcode, getAllOrdersWB, loading} = useWarehouseService()
     const [logs, setLogs] = useState([]) 
     const [data, setData] = useState([])
     const [originalData, setOriginalData] = useState([])
@@ -143,7 +143,7 @@ const App = () => {
                                     Общая история v
                                   </Button> 
                                </div>
-                        <WarehouseList category={category} logs={logs} sort={sort} data={data} allOrders={allOrders}/>
+                        <WarehouseList category={category} logs={logs} sort={sort} data={data} allOrders={allOrders} loading={loading}/>
                         <RefreshOnIdle/>
                     </div>
                 }/>  

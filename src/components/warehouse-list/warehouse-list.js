@@ -4,9 +4,10 @@ import { useEffect, useState  } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import { ClipLoader } from 'react-spinners';
 import './warehouse-list.css'
 
-const WarehouseList = ({logs, data, allOrders}) => {
+const WarehouseList = ({logs, data, allOrders, loading}) => {
     const [newLogs, setNewLogs] = useState([])
 
     useEffect(() => {
@@ -87,7 +88,13 @@ const WarehouseList = ({logs, data, allOrders}) => {
             return(
                 <> 
                     <ul className="app-list list-group"  > 
-                        {elements}
+                        {  loading ?            
+                     <ClipLoader color="#0d6efd"   cssOverride={{
+                                            width: '100px',
+                                            height: '100px',
+                                            marginLeft: '450px',
+                                            marginTop: '100px' 
+                                        }} /> : elements}
                     </ul> 
                 </>
             )

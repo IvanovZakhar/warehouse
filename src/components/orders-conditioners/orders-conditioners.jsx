@@ -4,16 +4,23 @@ import useWarehouseService from "../../services/warehouse-services";
 import { useEffect } from "react";
 import { useState } from "react";
 import Table from 'react-bootstrap/Table';
-import './orders-conditioners.scss'
 import InfoTableOrders from "../InfoTableOrders/InfoTableOrders";
 import OtherProducts from "../other-products/other-products";
+import FilterCategory from "./filter-category/filter-category"; 
+import Spinner from 'react-bootstrap/Spinner';
+import { ClipLoader } from 'react-spinners';
+import './orders-conditioners.scss'
 
 const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
     const [orders, setOrders] = useState([])
-    const {getAllOrdersOZN, getAllOrdersYandex } = useWarehouseService()
+    const {getAllOrdersOZN, getAllOrdersYandex, loading } = useWarehouseService()
     const [checkedPostings, setCheckedPostings] = useState([]);
     const [ordersYandex, setOrdersYandex] = useState([])
     const [ordersOzn, setOrdersOzn] = useState([])
+    const [allProducts, setAllProducts] = useState([])
+    const [allOriginalProducts, setAllOriginalProducts] = useState([])
+    const [date, setDate] = useState('')
+
 
     useEffect(() => {   
         
@@ -58,19 +65,166 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
         return new Date(year + 2000, month - 1, day); 
       } 
    
-    const elems = orders.filter(item => item.productName.slice(0, 8) === 'Защитный'  
-                                        || item.productName.slice(0, 7) === 'Корзина'     
-                                        || item.productArt.slice(0, 4) === 'AR46'  
-                                        || item.productArt.slice(0, 4) === 'AR18' 
-                                        || item.productArt == 'AR75254Ц007-06' 
-                                        || item.productArt == 'AR75354Ц007-06' 
-                                        || item.productArt == 'AR75554Ц007-06' 
-                                        || item.productArt == 'AR75654Ц007-06') 
-    const newElem = elems.filter(item => item.productArt !== 'кб850' && item.productArt !== 'кб850У'); 
-    const sortedElems = newElem.sort((a, b) => parseDate(a.date) - parseDate(b.date))
-    
-    
-   
+      useEffect(() => {
+        updateProducts ()
+      }, [orders])
+
+      function updateProducts (){
+         // Переносим логику вычисления elems и newElem внутрь useEffect
+         const elems = orders.filter(item => 
+            item.productName.slice(0, 8) === 'Защитный' || 
+            item.productName.slice(0, 7) === 'Корзина' || 
+            item.productArt.slice(0, 4) === 'AR46' || 
+            item.productArt.slice(0, 4) === 'AR18' || 
+            item.productArt === 'AR75254Ц007-06' || 
+            item.productArt === 'AR75354Ц007-06' || 
+            item.productArt === 'AR75554Ц007-06' || 
+            item.productArt === 'AR75654Ц007-06');
+        
+          const newElem = elems.filter(item => item.productArt !== 'кб850' && item.productArt !== 'кб850У');
+        
+          // Удостоверимся, что sortedElems получается путём сортировки newElem
+          const sortedElems = newElem.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+        
+          setAllProducts(sortedElems); 
+          setAllOriginalProducts(sortedElems)
+          // В зависимости мы ставим orders, так как изменение orders может повлиять на конечный результат sortedElems
+          // Убедитесь, что parseDate не создаётся заново при каждом рендеринге. Это предполагает,
+          // что parseDate является стабильной функцией, например, объявлена за пределами компонента
+          // или с использованием useCallback, если объявлена внутри компонента.
+      }
+
+    function onSetDate(date) {
+        
+        updateProducts () 
+        const correctDate = `${date.slice(8,10)}.${date.slice(5,7)}.${date.slice(2,4)}`
+        setDate(correctDate)
+        const res = allOriginalProducts.filter(product => product.date == correctDate) 
+        setAllProducts(res)
+    }
+
+    function onSetConditioners () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(product => product.productName.slice(0, 7) == 'Корзина') 
+        setAllProducts(res)
+    }
+
+
+    function onSetPVLUniversal () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18W7178H9-06' || 
+            item.productArt === 'AR18W7198H9-06' || 
+            item.productArt === 'AR18W7128H9-06' || 
+            item.productArt === 'AR18W7168H9-06' || 
+            item.productArt === 'AR18W7118H9-06' || 
+            item.productArt === 'AR18W7138H9-06' || 
+            item.productArt === 'AR18W7158H9-06' || 
+            item.productArt === 'AR18W7148H9-06' || 
+            item.productArt === 'AR18W7188H9-06');
+        setAllProducts(res)
+    }  
+
+    function onSetPVL () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18V3428H9-06' || 
+            item.productArt === 'AR18V3448H9-06' || 
+            item.productArt === 'AR18V3438H9-06' || 
+            item.productArt === 'AR18V3458H9-06' || 
+            item.productArt === 'AR18V3468H9-06' || 
+            item.productArt === 'AR18V34Y8H9-06'   );
+        setAllProducts(res)
+    } 
+
+    function onSetUniversal () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18V7138H9-06' || 
+            item.productArt === 'AR18V7118H9-06' || 
+            item.productArt === 'AR18V7128H9-06' || 
+            item.productArt === 'AR18V7148H9-06' || 
+            item.productArt === 'AR18V7158H9-06'   );
+        setAllProducts(res)
+    } 
+
+    function onSetSinglePitched () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18K1B18H9-06' || 
+            item.productArt === 'AR18K1B1I39-06' || 
+            item.productArt === 'AR18K112959-06' || 
+            item.productArt === 'AR18K112I39-06' || 
+            item.productArt === 'AR18K1B28H9-06' || 
+            item.productArt === 'AR18K111I39-06' || 
+            item.productArt === 'AR18K1B2I39-06' || 
+            item.productArt === 'AR18K1B1959-06' || 
+            item.productArt === 'AR18K111959-06' || 
+            item.productArt === 'AR18K1128H9-06' || 
+            item.productArt === 'AR18K1B2959-06'      );
+        setAllProducts(res)
+    } 
+
+    function onSetDoublePitched () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18K1B4959-06' || 
+            item.productArt === 'AR18K1B38H9-06' || 
+            item.productArt === 'AR18K1B4I39-06' || 
+            item.productArt === 'AR18K1B3959-06' || 
+            item.productArt === 'AR18K1B48H9-06' || 
+            item.productArt === 'AR18K1B3I39-06'       );
+        setAllProducts(res)
+    } 
+
+    function onSetArched () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18K134I39-06' || 
+            item.productArt === 'AR18K135959-06' || 
+            item.productArt === 'AR18K133I39-06' || 
+            item.productArt === 'AR18K1338H9-06' || 
+            item.productArt === 'AR18K136959-06' || 
+            item.productArt === 'AR18K1348H9-06' || 
+            item.productArt === 'AR18K1368H9-06' || 
+            item.productArt === 'AR18K136I39-06' || 
+            item.productArt === 'AR18K135I39-06' || 
+            item.productArt === 'AR18K133959-06' || 
+            item.productArt === 'AR18K1358H9-06' || 
+            item.productArt === 'AR18K134959-06'      );
+        setAllProducts(res)
+    } 
+
+    function onSetRailings () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item =>  
+            item.productArt === 'AR18G7128H9-06' || 
+            item.productArt === 'AR18G7148H9-06' || 
+            item.productArt === 'AR18G7158H9-06' || 
+            item.productArt === 'AR18G7138H9-06' || 
+            item.productArt === 'AR18G7168H9-06' || 
+            item.productArt === 'AR18V34C8H9-06'        );
+        setAllProducts(res)
+    } 
+
+    function onSetVisors () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item => item.productName.slice(0, 8) === "Защитный" );
+        setAllProducts(res)
+    } 
+
+    function onSetFances () {
+        const products = date === '' ? allOriginalProducts : allOriginalProducts.filter(product => product.date == date) 
+        const res = products.filter(item => item.productArt.slice(0, 4) === "AR16" );
+        setAllProducts(res)
+    } 
+
+    function onSetAllProducts () { 
+        setAllProducts(allOriginalProducts)
+       
+    } 
+
+
     function updateChecked(e, postingNumber, date) {
         let elems = JSON.parse(localStorage.getItem('readyPosting')) || [];
     
@@ -131,6 +285,27 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
             <AppInfo/>
             <InfoTableOrders ordersOzn={ordersOzn} allOrdersYandex={ordersYandex} logs={logs} productsOrdersBarcode={productsOrdersBarcode} allOrdersWB={allOrdersWB}/>
             <OtherProducts />
+            <FilterCategory onSetDate={onSetDate} 
+                            onSetConditioners={onSetConditioners}  
+                            onSetPVLUniversal={onSetPVLUniversal}
+                            onSetPVL={onSetPVL}
+                            onSetUniversal={onSetUniversal}
+                            onSetSinglePitched={onSetSinglePitched}
+                            onSetDoublePitched={onSetDoublePitched}
+                            onSetArched={onSetArched}
+                            onSetRailings={onSetRailings}
+                            onSetVisors={onSetVisors}
+                            onSetFances={onSetFances}
+                            onSetAllProducts={onSetAllProducts}
+                            date={date}
+                            allProducts={allProducts}/>
+           {loading ?            
+                     <ClipLoader color="#0d6efd"   cssOverride={{
+                                            width: '100px',
+                                            height: '100px',
+                                            marginLeft: '450px',
+                                            marginTop: '100px' 
+                                        }} /> :
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -145,7 +320,8 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedElems.map((items, i) => {
+        
+                    {  allProducts.map((items, i) => {
                         const {postingNumber, date, productArt, productName, quantity, warehouse} = items;
                         const isChecked = checkedPostings.includes(postingNumber); 
                         return(
@@ -158,18 +334,18 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
                                 <td>{quantity}</td>
                                 <td>{warehouse}</td>
                                 <td>{
-                                       <input type="checkbox" 
-                                              className="checker-orders" 
-                                              id="scales" name="scales"  
-                                              onClick={(e) => updateChecked(e, postingNumber, date)} 
-                                              checked={isChecked}/> 
+                                        <input type="checkbox" 
+                                                className="checker-orders" 
+                                                id="scales" name="scales"  
+                                                onClick={(e) => updateChecked(e, postingNumber, date)} 
+                                                checked={isChecked}/> 
                                     }</td>
                             </tr>
                         )
                     })}
                     
                 </tbody>
-            </Table>
+            </Table>}
         </div>
     )
 }
