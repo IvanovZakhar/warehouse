@@ -72,6 +72,7 @@ const OrdersConditioners = ( {logs, productsOrdersBarcode, allOrdersWB}) => {
          // Переносим логику вычисления elems и newElem внутрь useEffect
          const elems = orders.filter(item => 
             item.productName.slice(0, 8) === 'Защитный' || 
+            item.productName.slice(0, 6) === 'Ограда' ||
             item.productName.slice(0, 7) === 'Корзина' || 
             item.productArt.slice(0, 4) === 'AR46' || 
             item.productArt.slice(0, 4) === 'AR18' || 
