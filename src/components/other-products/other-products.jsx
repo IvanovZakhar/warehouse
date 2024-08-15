@@ -25,8 +25,9 @@ function OtherProducts() {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const onSubmit = (data) => {
-    addOtherProduct(newProduct).then(res => {window.location.reload()})
+  const onSubmit = (data) => { 
+    const product = {...newProduct, number_posting: data.number_posting} 
+    addOtherProduct(product).then(res => {window.location.reload()})
   }
 
   useEffect(() => {
@@ -87,12 +88,13 @@ function OtherProducts() {
         <Offcanvas.Body> 
             <div className='other-products'>
                 {otherProducts.map(product => {
-                    const {photo, name, article, _id } = product
+                    const {photo, name, article, _id, number_posting } = product
                     return (
                         <Card style={{ width: '10rem', margin:'10px 0 0 10px'}} key={_id}  >
                             <Card.Img variant="top" src={photo}/>
                             <Card.Body>
                                 <Card.Title style={{fontSize:'14px'}}>{article}</Card.Title> 
+                                <Card.Text style={{fontSize:'14px', textDecoration: 'underline '}}>{number_posting}</Card.Text>
                                 <Card.Text style={{fontSize:'10px'}}>{name}</Card.Text>
                                 <Button variant="danger" onClick={() => {deleteItem(_id)}}>Удалить</Button>
                             </Card.Body>
@@ -106,12 +108,17 @@ function OtherProducts() {
         <Accordion.Header>Добавить продукт</Accordion.Header>
         <Accordion.Body>
             <form onSubmit={handleSubmit(onSubmit)}>
-            
+             
                     <label htmlFor="article">Артикул</label>
                     <input
                         id="article"  
                         {...register("article", { required: true, maxLength: 30 })}
                         onChange={onSetNameProduct}
+                    />
+                    <label htmlFor="number_posting">Номер отправления</label>
+                    <input
+                        id="number_posting"  
+                        {...register("number_posting", { required: true, maxLength: 30 })} 
                     />
                     <label htmlFor="name">Название</label>
                     <p style={{width: '200px', fontSize: '12px'}}>{newProduct.name ? newProduct.name : ''}</p>
